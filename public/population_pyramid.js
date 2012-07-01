@@ -1,7 +1,7 @@
 function renderChart(data) {
 
     // chart settings
-    var margin = {top: 40, right: 10, bottom: 20, left: 10};
+    var margin = {top: 60, right: 10, bottom: 20, left: 10};
     var outerWidth = 860;
     var outerHeight = 800;
     var width = outerWidth - margin.left - margin.right;
