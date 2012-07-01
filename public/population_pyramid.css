@@ -1,0 +1,64 @@
+svg {
+    font-family: Arial, sans-serif;
+}
+
+path.outline-male {
+    fill: none;
+    stroke: #63788f;
+    stroke-width: 2;
+}
+
+circle.outline-male {
+    fill: #63788f;
+    stroke: #63788f;
+}
+
+path.outline-female {
+     fill: none;
+     stroke: #8f6d8f;
+     stroke-width: 2;
+ }
+
+circle.outline-female {
+    fill: #8f6d8f;
+    stroke: #8f6d8f;
+}
+
+.male {
+    fill: #a6caf0;
+    stroke: #a6caf0;
+}
+
+.female {
+    fill: #cc9ccc;
+    stroke: #cc9ccc;
+}
+
+line.axis {
+    stroke-width: 1;
+    stroke: #e0e0f7;
+}
+
+line.tick {
+    stroke-width: 1;
+    stroke: #e0e0f7;
+}
+
+.centerHeader {
+    font-size: 14px;
+    font-weight: bold;
+    stroke: none;
+    fill: #5757d5;
+}
+
+.panelHeader {
+    font-size: 20px;
+    stroke: none;
+    fill: #5757d5;
+}
+
+.tickLabel {
+    fill: #5757d5;
+    font-size: 14px;
+    stroke: none;
+}

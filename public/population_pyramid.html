@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Population Pyramid</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=9">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/population_pyramid.css" />
+</head>
+<body>
+<div id="chart"></div>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/bootstrap-tooltip.js"></script>
+<script src="/lib/bootstrap-popover.js"></script>
+<script src="/lib/cpopover.js"></script>
+<script src="/lib/d3.v2.js"></script>
+<script src="/population_pyramid.js"></script>
+<script>
+    d3.json('data.json', function(data) {
+       renderChart(data);
+    });
+</script>
+</body>
+</html>
