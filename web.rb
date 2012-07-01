@@ -5,6 +5,19 @@ require 'json'
 set :public, 'public'
 set :public_folder, 'public'
 
+get '/regions' do
+  attribs = DataLoader.buildDictionary()
+  
+  output = []
+  regions = attribs['geo']
+  regions.each_key do |key| 
+    name = regions[key]
+    output = output + [{:name => name, :id => key}]
+  end
+  
+  JSON.dump(output)  
+end
+
 get '/region/:region_id' do
   @region_id = params[:region_id]
   puts @region_id

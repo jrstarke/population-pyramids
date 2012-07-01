@@ -82,7 +82,10 @@ module DataLoader
             age_id = node.attribute("value")
             age = attribs["age"][age_id]
             age = age.gsub("Total - Age","total")
-            if /^\d*$|total/.match(age)
+            age = age.gsub("Under 1 year","<1")
+            age = age.gsub("100 years and over","100+")
+            
+            if /^\d*$|total|\<1|100\+/.match(age)
               element["age"] = age
             end  
           
