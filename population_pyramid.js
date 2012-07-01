@@ -57,11 +57,13 @@ function renderChart(data) {
         .attr("y", -15)
         .attr("text-anchor", "middle")
         .attr('class', 'centerHeader');
+        
+    var evenData = data.filter(function(d) {return parseInt(d.age) % 2 == 0})
 
-    centerLabelPanel.selectAll("text.tickLabel").data(data).enter().append("text")
+    centerLabelPanel.selectAll("text.tickLabel").data(evenData).enter().append("text")
         .attr('class', 'tickLabel')
         .attr("x", centerLabelWidth / 2)
-        .attr("y", function(d, i) { return yScale(i) + yScale.rangeBand(); })
+        .attr("y", function(d, i) { return yScale((i+1)*2) + yScale.rangeBand(); })
         .attr("dy", ".35em") // vertical-align: middle
         .attr("text-anchor", "middle")
         .text(function(d) { return d.age; });
