@@ -1,21 +1,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>Population Pyramid</title>
+	<title>Population Pyramids</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=9">
 	<link rel="stylesheet" type="text/css" href="/lib/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="/population_pyramid.css" />
 </head>
 <body>
-<div id="chart"></div>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="#">Population Pyramid of</a>
+            <form class="navbar-search" id="form_main">
+                <input type="text" class="search-query" placeholder="Victoria" id="select_main" />
+            </form>
+            <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
+            <form class="navbar-search" id="form_compare">
+                <input type="text" class="search-query" placeholder="Canada" id="select_compare" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
 <script src="/lib/jquery.min.js"></script>
 <script src="/lib/underscore.min.js"></script>
+<script src="/lib/bootstrap-typeahead.js"></script>
 <script src="/lib/bootstrap-tooltip.js"></script>
 <script src="/lib/bootstrap-popover.js"></script>
 <script src="/lib/cpopover.js"></script>
 <script src="/lib/d3.v2.js"></script>
 <script src="/population_pyramid.js"></script>
 <script>
+    d3.json('/regions', function(regions) {
+        var setupTypeahead = function(id) {
+            $(id).typeahead({
+                'source': _.map(regions, function(region) { return region.name; })
+            });
+        };
+
+        var updatePyramid = function() {
+            var mainValue = $('#select_main').val().toLowerCase();
+            var mainId = regionIdLookupTable[mainValue];
+
+            if (mainId === undefined) {
+                // TODO
+            } else {
+                console.log(mainId);
+                d3.json('/region/' + mainId + '/data.json', function(data) {
+                    $('#chart').empty();
+                    renderChart(data);
+                });
+            }
+        }
+
+        setupTypeahead('#select_main');
+        setupTypeahead('#select_compare');
+
+        var regionIdLookupTable = {}
+        _.each(regions, function(d) {
+            regionIdLookupTable[d.name.toLowerCase()] = d.id;
+        });
+
+        var onSubmit = function(e) {
+            e.preventDefault();
+            updatePyramid();
+        };
+
+        $("#form_main").submit(onSubmit);
+        $("#form_compare").submit(onSubmit);
+    });
+
     d3.json('/region/00/data.json', function(data) {
        renderChart(data);
     });
