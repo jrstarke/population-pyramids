@@ -9,16 +9,16 @@
 <body>
 <div id="chart"></div>
 <script src="/lib/jquery.min.js"></script>
+<script src="/lib/underscore.min.js"></script>
 <script src="/lib/bootstrap-tooltip.js"></script>
 <script src="/lib/bootstrap-popover.js"></script>
 <script src="/lib/cpopover.js"></script>
 <script src="/lib/d3.v2.js"></script>
-
+<script src="/population_pyramid.js"></script>
 <script>
-    d3.json('./data.json', function(data) {
+    d3.json('/region/00/data.json', function(data) {
        renderChart(data);
     });
 </script>
-	<h1>Hello</h1>
 </body>
 </html>
