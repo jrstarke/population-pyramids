@@ -15,7 +15,7 @@
 <script src="lib/d3.v2.js"></script>
 <script src="population_pyramid.js"></script>
 <script>
-    d3.csv('population_pyramid.csv', function(data) {
+    d3.json('data.json', function(data) {
        renderChart(data);
     });
 </script>

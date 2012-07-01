@@ -6,23 +6,23 @@ function renderChart(data) {
         .rollup(function(d) { return d3.sum(d, function(d) { return parseInt(d.Male) + parseInt(d.Female); }); })
         .entries(data)[0].values;
 
-    data = data.map(function(d) {
-        return {
-            'age': d['Min Age'],
-            'total': {
-                'people': parseInt(d.Male) + parseInt(d.Female),
-                'percentOfTotal': ((parseInt(d.Male) + parseInt(d.Female)) * 100) / totalPopulation
-            },
-            'male': {
-                'people': parseInt(d.Male),
-                'percentOfTotal': (d.Male * 100) / totalPopulation
-            },
-            'female': {
-                'people': parseInt(d.Female),
-                'percentOfTotal': (d.Female * 100) / totalPopulation
-            }
-        };
-    });
+    // data = data.map(function(d) {
+        // return {
+            // 'age': d['Min Age'],
+            // 'total': {
+                // 'people': parseInt(d.Male) + parseInt(d.Female),
+                // 'percentOfTotal': ((parseInt(d.Male) + parseInt(d.Female)) * 100) / totalPopulation
+            // },
+            // 'male': {
+                // 'people': parseInt(d.Male),
+                // 'percentOfTotal': (d.Male * 100) / totalPopulation
+            // },
+            // 'female': {
+                // 'people': parseInt(d.Female),
+                // 'percentOfTotal': (d.Female * 100) / totalPopulation
+            // }
+        // };
+    // });
 
     // chart settings
     var margin = {top: 40, right: 10, bottom: 20, left: 10};
