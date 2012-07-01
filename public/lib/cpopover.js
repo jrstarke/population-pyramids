@@ -23,7 +23,7 @@
         constructor: CirclePopover
         , getPosition: function (inside) {
             return $.extend({}, (inside ? {top: 0, left: 0} : this.$element.offset()), {
-                width: 840, height: 35
+                width: 840, height: 4
             })
         }
     })
