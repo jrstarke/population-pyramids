@@ -58,15 +58,14 @@ function renderChart(data) {
         .attr("text-anchor", "middle")
         .attr('class', 'centerHeader');
         
-    var evenData = data.filter(function(d) {return parseInt(d.age) % 2 == 0})
-
-    centerLabelPanel.selectAll("text.tickLabel").data(evenData).enter().append("text")
+    centerLabelPanel.selectAll("text.tickLabel").data(data).enter().append("text")
         .attr('class', 'tickLabel')
         .attr("x", centerLabelWidth / 2)
-        .attr("y", function(d, i) { return yScale((i+1)*2) + yScale.rangeBand(); })
+        .attr("y", function(d, i) { return yScale(i) + yScale.rangeBand() / 2; })
         .attr("dy", ".35em") // vertical-align: middle
         .attr("text-anchor", "middle")
-        .text(function(d) { return d.age; });
+        .attr("display", function(d, i) { return (i % 5) === 0 ? "block" : "none" })
+        .text(function(d) { return (d.age == 1) ? "< 1" : d.age - 1; });
 
     // panels
     renderPanel('male', 0, "Males");
@@ -147,7 +146,7 @@ function renderChart(data) {
         .attr('fill', 'none')
         .attr('stroke', 'none')
         .attr('pointer-events','visible')
-        .attr('title', function(d) { return 'Age ' + d.age; })
+        .attr('title', function(d) { return 'Age ' + ((d.age == 1) ? "< 1" : d.age - 1); })
         .attr('data-content', function(d) {
             return '<b>' + d.total.people + ' people (' + d3.round(d.total.percentOfTotal, 2) + '% of population)' + '</b><br/>'
                 + d.male.people + ' men (' + d3.round(d.male.percentOfTotal, 2) + '% of population)' + '<br/>'
