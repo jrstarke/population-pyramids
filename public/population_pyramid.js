@@ -65,7 +65,7 @@ function renderChart(data) {
         .attr("dy", ".35em") // vertical-align: middle
         .attr("text-anchor", "middle")
         .attr("display", function(d, i) { return (i % 5) === 0 ? "block" : "none" })
-        .text(function(d) { return (d.age == 1) ? "< 1" : d.age - 1; });
+        .text(function(d) { return d.age; });
 
     // panels
     renderPanel('male', 0, "Males");
@@ -146,7 +146,7 @@ function renderChart(data) {
         .attr('fill', 'none')
         .attr('stroke', 'none')
         .attr('pointer-events','visible')
-        .attr('title', function(d) { return 'Age ' + ((d.age == 1) ? "< 1" : d.age - 1); })
+        .attr('title', function(d) { return 'Age ' + d.age; })
         .attr('data-content', function(d) {
             return '<b>' + d.total.people + ' people (' + d3.round(d.total.percentOfTotal, 2) + '% of population)' + '</b><br/>'
                 + d.male.people + ' men (' + d3.round(d.male.percentOfTotal, 2) + '% of population)' + '<br/>'
