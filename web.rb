@@ -5,6 +5,10 @@ require 'json'
 set :public, 'public'
 set :public_folder, 'public'
 
+get '/' do
+  send_file('public/index.html')
+end
+
 get '/regions' do
   attribs = DataLoader.buildDictionary()
   
