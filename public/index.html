@@ -12,20 +12,30 @@
         <div class="container">
             <a class="brand" href="#">Population Pyramid of</a>
             <form class="navbar-search" id="form_main">
-                <input type="text" class="search-query" value="Victoria" id="select_main" />
+                <input type="text" class="search-query" id="select_main" value="Victoria" />
             </form>
             <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
             <form class="navbar-search" id="form_compare">
-                <input type="text" class="search-query" value="Canada" id="select_compare" />
+                <input type="text" class="search-query" id="select_compare" value="Canada" />
             </form>
         </div>
     </div>
 </div>
-
 <div class="container">
-    <div class="row-fluid">
+    <div id="mainErrorBox" class="row-fluid" style="display:none;">
         <div class="span12">
-
+            <div class="alert alert-block alert-error fade in">
+                <h4 class="alert-heading" id="mainErrorMessage"></h4>
+                <p>Check for typos or try entering a different place.</p>
+            </div>
+        </div>
+    </div>
+    <div id="compareErrorBox" class="row-fluid" style="display:none;">
+        <div class="span12">
+            <div class="alert alert-block alert-warn fade in">
+                <h4 class="alert-heading" id="compareErrorMessage"></h4>
+                <p>Check for typos or try entering a different place.</p>
+            </div>
         </div>
     </div>
     <div class="row-fluid">
@@ -40,6 +50,7 @@
 </div>
 <script src="/lib/jquery.min.js"></script>
 <script src="/lib/underscore.min.js"></script>
+<script src="/lib/bootstrap-alert.js"></script>
 <script src="/lib/bootstrap-typeahead.js"></script>
 <script src="/lib/bootstrap-tooltip.js"></script>
 <script src="/lib/bootstrap-popover.js"></script>
@@ -57,20 +68,50 @@
             });
         };
 
+        var showMainError = function(mainName) {
+            $('#mainErrorMessage').text("Place '" + mainName + "' not found.");
+            $('#mainErrorBox').show();
+        };
+        var showCompareError = function(compareName) {
+            $('#compareErrorMessage').text("Place '" + compareName + "' not found for comparison.");
+            $('#compareErrorBox').show();
+        };
+
         var updatePyramid = function(mainName, compareName) {
+            if (mainName === undefined) {
+                mainName = $('#select_main').val();
+            }
+            if (compareName === undefined) {
+                compareName = $('#select_compare').val();
+            }
+
+            $('#chart').empty();
+            $('.popover').remove(); // remove open popovers
+
             var mainId = regionIdLookupTable[mainName.toLowerCase()];
             var compareId = regionIdLookupTable[compareName.toLowerCase()];
 
-            if (mainId === undefined && compareId == undefine) {
+            if (mainId === undefined && compareId == undefined) {
+                showMainError(mainName);
+                showCompareError(compareName);
             } else if (mainId === undefined) {
+                showMainError(mainName);
+                $('#compareErrorBox').hide();
             } else if (compareId === undefined) {
-            } else {
-                $('#chart').empty();
-                $('.popover').remove(); // remove open popovers
+                $('#mainErrorBox').hide();
+                showCompareError(compareName);
 
-                console.log(mainId);
+                d3.json('/region/' + mainId + '/data.json', function(data) {
+                    renderChart(data);
+                });
+            } else {
+                $('#mainErrorBox').hide();
+                $('#compareErrorBox').hide();
+
+                // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
+                        console.log("x");
                         renderChart(data, compareData);
                     });
                 });
@@ -87,9 +128,7 @@
 
         var onSubmit = function(e) {
             e.preventDefault();
-            var mainName = $('#select_main').val();
-            var compareName = $('#select_compare').val();
-            updatePyramid(mainName, compareName);
+            updatePyramid();
         };
 
         $("#form_main").submit(onSubmit);
