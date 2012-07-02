@@ -52,18 +52,27 @@
             $(id).typeahead({
                 'source': _.map(regions, function(region) { return region.name; })
             });
+            $(id).change(function(e){
+                updatePyramid();
+            });
         };
 
         var updatePyramid = function() {
-            var mainValue = $('#select_main').val().toLowerCase();
-            var mainId = regionIdLookupTable[mainValue];
+            var mainName = $('#select_main').val();
+            var mainId = regionIdLookupTable[mainName.toLowerCase()];
 
-            if (mainId === undefined) {
-                // TODO
+            var compareName = $('#select_compare').val();
+            var compareId = regionIdLookupTable[compareName.toLowerCase()];
+
+            if (mainId === undefined && compareId == undefine) {
+            } else if (mainId === undefined) {
+            } else if (compareId === undefined) {
             } else {
+                $('#chart').empty();
+                $('.popover').remove(); // remove open popovers
+
                 console.log(mainId);
                 d3.json('/region/' + mainId + '/data.json', function(data) {
-                    $('#chart').empty();
                     renderChart(data);
                 });
             }
