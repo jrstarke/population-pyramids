@@ -10,6 +10,16 @@ function renderChart(data, compareData) {
     var centerLabelWidth = 50;
     var gridLabelHeight = 80;
 
+    // sum of population
+    var totalMales = d3.nest()
+        .key(function(d) { return 'all'; })
+        .rollup(function(d) { return d3.sum(d, function(d) { return parseInt(d.male.people); }); })
+        .entries(data)[0].values;
+    var totalFemales = d3.nest()
+        .key(function(d) { return 'all'; })
+        .rollup(function(d) { return d3.sum(d, function(d) { return parseInt(d.female.people); }); })
+        .entries(data)[0].values;
+
     // scales
     var sideWidth = (width - centerLabelWidth) / 2;
     var maxPopulationPercentage = d3.max(data, function(d) {
@@ -50,11 +60,17 @@ function renderChart(data, compareData) {
         .text(function(d) { return d.age; });
 
     // panels
-    renderPanel('male', 0, "Males");
-    renderPanel('female', centerLabelWidth + sideWidth, "Females");
+    renderPanel('male', 0, "Males", totalMales);
+    renderPanel('female', centerLabelWidth + sideWidth, "Females", totalFemales);
 
-    function renderPanel(type, xTranslate, gender) {
+    function renderPanel(type, xTranslate, gender, numberOfPeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
+
+        panel.append('text').text(numberOfPeople + ' ' + gender) // TODO format
+            .attr("x", sideWidth / 2)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .attr('class', 'panelHeader');
 
         panel.selectAll("rect").data(data).enter().append("rect")
             .attr('class', type)
