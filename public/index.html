@@ -77,7 +77,14 @@
             $('#compareErrorBox').show();
         };
 
+        var updateInProgress = false;
         var updatePyramid = function(mainName, compareName) {
+            if (updateInProgress) {
+                return; // XXX UI elements should be deactivated
+            }
+
+            updateInProgress = true;
+
             if (mainName === undefined) {
                 mainName = $('#select_main').val();
             }
@@ -103,6 +110,7 @@
 
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     renderChart(data);
+                    updateInProgress = false;
                 });
             } else {
                 $('#mainErrorBox').hide();
@@ -111,8 +119,8 @@
                 // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
-                        console.log("x");
                         renderChart(data, compareData);
+                        updateInProgress = false;
                     });
                 });
             }
