@@ -35,6 +35,10 @@
                     You can move the mouse over the age group in the pyramid to get detailed information.
                 </p>
             </div>
+            <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
+                <h4 class="alert-heading">Loading...</h4>
+                <p>The population pyramid should show in a second.</p>
+            </div>
             <div id="mainErrorBox" class="alert alert-block alert-error fade in" style="display:none;">
                 <h4 class="alert-heading" id="mainErrorMessage"></h4>
                 <p>Check for typos or try entering a different place.</p>
@@ -112,20 +116,24 @@
             } else if (compareId === undefined) {
                 $('#mainErrorBox').hide();
                 showCompareError(compareName);
+                $('#loadingBox').show();
 
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     renderChart(data);
                     updateInProgress = false;
+                    $('#loadingBox').hide();
                 });
             } else {
                 $('#mainErrorBox').hide();
                 $('#compareErrorBox').hide();
+                $('#loadingBox').show();
 
                 // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
                         renderChart(data, compareData);
                         updateInProgress = false;
+                        $('#loadingBox').hide();
                     });
                 });
             }
