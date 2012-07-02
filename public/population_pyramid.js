@@ -1,4 +1,4 @@
-function renderChart(data) {
+function renderChart(data, compareData) {
 
     // chart settings
     var margin = {top: 60, right: 10, bottom: 20, left: 10};
@@ -59,20 +59,22 @@ function renderChart(data) {
             .attr('height', yScale.rangeBand())
             .attr('width', function(d) { return xScale(d[type].percentOfTotal); } )
 
-        var line = d3.svg.line()
-            .x(function(d) {
-                return (type === 'male') ? xScale.range()[1] - xScale(d[type].percentOfTotal) : xScale(d[type].percentOfTotal);
-            })
-            .y(function(d, i) {
-                if (i == data.length) {
-                    return yScale.rangeExtent()[0];
-                }
-                return yScale(i) + yScale.rangeBand();
-            })
-            .interpolate("step-before");
-        panel.append("svg:path")
-            .attr("class", "outline-" + type)
-            .attr("d", line(data.concat(data[data.length - 1])));
+        if (compareData !== undefined) {
+            var line = d3.svg.line()
+                .x(function(d) {
+                    return (type === 'male') ? xScale.range()[1] - xScale(d[type].percentOfTotal) : xScale(d[type].percentOfTotal);
+                })
+                .y(function(d, i) {
+                    if (i == compareData.length) {
+                        return yScale.rangeExtent()[0];
+                    }
+                    return yScale(i) + yScale.rangeBand();
+                })
+                .interpolate("step-before");
+            panel.append("svg:path")
+                .attr("class", "outline-" + type)
+                .attr("d", line(compareData.concat(compareData[compareData.length - 1])));
+        }
 
         var ticks = xScale.ticks(5);
         var tickPosition = (type === 'male') ? function(d) { return xScale.range()[1] - xScale(d); } : xScale;

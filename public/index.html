@@ -12,11 +12,11 @@
         <div class="container">
             <a class="brand" href="#">Population Pyramid of</a>
             <form class="navbar-search" id="form_main">
-                <input type="text" class="search-query" placeholder="Victoria" id="select_main" />
+                <input type="text" class="search-query" value="Victoria" id="select_main" />
             </form>
             <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
             <form class="navbar-search" id="form_compare">
-                <input type="text" class="search-query" placeholder="Canada" id="select_compare" />
+                <input type="text" class="search-query" value="Canada" id="select_compare" />
             </form>
         </div>
     </div>
@@ -57,11 +57,8 @@
             });
         };
 
-        var updatePyramid = function() {
-            var mainName = $('#select_main').val();
+        var updatePyramid = function(mainName, compareName) {
             var mainId = regionIdLookupTable[mainName.toLowerCase()];
-
-            var compareName = $('#select_compare').val();
             var compareId = regionIdLookupTable[compareName.toLowerCase()];
 
             if (mainId === undefined && compareId == undefine) {
@@ -73,7 +70,9 @@
 
                 console.log(mainId);
                 d3.json('/region/' + mainId + '/data.json', function(data) {
-                    renderChart(data);
+                    d3.json('/region/' + compareId + '/data.json', function(compareData) {
+                        renderChart(data, compareData);
+                    });
                 });
             }
         }
@@ -88,15 +87,15 @@
 
         var onSubmit = function(e) {
             e.preventDefault();
-            updatePyramid();
+            var mainName = $('#select_main').val();
+            var compareName = $('#select_compare').val();
+            updatePyramid(mainName, compareName);
         };
 
         $("#form_main").submit(onSubmit);
         $("#form_compare").submit(onSubmit);
-    });
 
-    d3.json('/region/00/data.json', function(data) {
-       renderChart(data);
+        updatePyramid('Victoria', 'Canada');
     });
 </script>
 </body>
