@@ -41,29 +41,29 @@ circle.outline-female {
 
 line.axis {
     stroke-width: 1;
-    stroke: #e0e0f7;
+    stroke: lightgray;
 }
 
 line.tick {
     stroke-width: 1;
-    stroke: #e0e0f7;
+    stroke: lightgray;
 }
 
 .centerHeader {
     font-size: 14px;
     font-weight: bold;
     stroke: none;
-    fill: #5757d5;
+    fill: gray;
 }
 
 .panelHeader {
     font-size: 20px;
     stroke: none;
-    fill: #5757d5;
+    fill: gray;
 }
 
 .tickLabel {
-    fill: #5757d5;
+    fill: gray;
     font-size: 14px;
     stroke: none;
 }
