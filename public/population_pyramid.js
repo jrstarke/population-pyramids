@@ -66,7 +66,7 @@ function renderChart(data, compareData) {
     function renderPanel(type, xTranslate, gender, numberOfPeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
 
-        panel.append('text').text(numberOfPeople + ' ' + gender) // TODO format
+        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender)
             .attr("x", sideWidth / 2)
             .attr("y", 15)
             .attr("text-anchor", "middle")
