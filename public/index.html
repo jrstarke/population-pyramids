@@ -7,20 +7,6 @@
 	<link rel="stylesheet" type="text/css" href="/population_pyramid.css" />
 </head>
 <body>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="brand" href="#">Population Pyramid of</a>
-            <form class="navbar-search" id="form_main">
-                <input type="text" class="search-query" id="select_main" value="Victoria" />
-            </form>
-            <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
-            <form class="navbar-search" id="form_compare">
-                <input type="text" class="search-query" id="select_compare" value="Canada" />
-            </form>
-        </div>
-    </div>
-</div>
 <div class="container">
     <div class="row-fluid">
         <div class="span12">
@@ -30,11 +16,18 @@
                 <p>
                     show the distribution of the population
                     by age group and sex.
-                    You can <b>enter the names of places</b> (Canada, Provinces, and agglomerations) into the fields at the top to show
-                    and compare their population pyramids.
+                    You can <b>enter the names of places</b> (Canada, provinces, and cities)
+                    into the fields below to show and compare their population pyramids.
                     You can move the mouse over the age group in the pyramid to get detailed information.
                 </p>
             </div>
+            <h3 id="header">
+                Population pyramid of
+                <input type="text" class="search-query" id="select_main" value="Victoria" />
+                <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
+                <input type="text" class="search-query" id="select_compare" value="Canada" />
+                <span class="brand">&nbsp;&nbsp;&nbsp;(line)</span>
+            </h3>
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
                 <h4 class="alert-heading">Loading...</h4>
                 <p>The population pyramid should show in a second.</p>
@@ -47,7 +40,6 @@
                 <h4 class="alert-heading" id="compareErrorMessage"></h4>
                 <p>Check for typos or try entering a different place.</p>
             </div>
-            <h3 id="header"></h3>
             <div id="chart"></div>
         </div>
     </div>
@@ -93,7 +85,6 @@
 
             updateInProgress = true;
 
-            $('#header').hide();
             $('#chart').empty();
             $('.popover').remove(); // remove open popovers
 
@@ -121,8 +112,6 @@
                 $('#loadingBox').show();
 
                 d3.json('/region/' + mainId + '/data.json', function(data) {
-                    $('#header').text('Population pyramid of ' + mainName);
-                    $('#header').show();
                     renderChart(data);
                     updateInProgress = false;
                     $('#loadingBox').hide();
@@ -135,8 +124,6 @@
                 // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
-                        $('#header').text('Population pyramid of ' + mainName + ' compared to ' + compareName + ' (line)');
-                        $('#header').show();
                         renderChart(data, compareData);
                         updateInProgress = false;
                         $('#loadingBox').hide();
@@ -158,8 +145,8 @@
             updatePyramid();
         };
 
-        $("#form_main").submit(onSubmit);
-        $("#form_compare").submit(onSubmit);
+        $("#select_main").submit(onSubmit);
+        $("#select_compare").submit(onSubmit);
 
         updatePyramid('Victoria', 'Canada');
     });

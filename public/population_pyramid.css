@@ -1,6 +1,5 @@
 body {
-    padding-top: 65px;
-    padding-bottom: 40px;
+    padding-top: 15px;
 }
 
 svg {
@@ -57,7 +56,7 @@ line.tick {
 }
 
 .panelHeader {
-    font-size: 20px;
+    font-size: 16px;
     stroke: none;
     fill: gray;
 }
@@ -70,4 +69,11 @@ line.tick {
 
 #header {
     text-align: center;
+}
+
+#header input {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 27px;
 }
