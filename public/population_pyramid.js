@@ -15,6 +15,12 @@ function renderChart(data, compareData) {
     var maxPopulationPercentage = d3.max(data, function(d) {
         return d3.max([d.male.percentOfTotal, d.female.percentOfTotal]);
     });
+    if (compareData !== undefined) {
+        var maxComparePopulationPercentage = d3.max(compareData, function(d) {
+            return d3.max([d.male.percentOfTotal, d.female.percentOfTotal]);
+        });
+        maxPopulationPercentage = d3.max([maxPopulationPercentage, maxComparePopulationPercentage]);
+    }
 
     var xScale = d3.scale.linear().domain([0, maxPopulationPercentage]).range([0, sideWidth]).nice();
     var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([height - gridLabelHeight, 0]); // flip
