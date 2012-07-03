@@ -1,4 +1,4 @@
-function renderChart(data, compareData) {
+function renderChart(data, compareData, place, comparePlace) {
 
     // chart settings
     var margin = {top: 40, right: 10, bottom: 20, left: 10};
@@ -66,7 +66,7 @@ function renderChart(data, compareData) {
     function renderPanel(type, xTranslate, gender, numberOfPeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
 
-        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender)
+        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender + ' (' + place + ')')
             .attr("x", sideWidth / 2)
             .attr("y", 15)
             .attr("text-anchor", "middle")

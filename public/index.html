@@ -114,7 +114,7 @@
                 $('#loadingBox').show();
 
                 d3.json('/region/' + mainId + '/data.json', function(data) {
-                    renderChart(data);
+                    renderChart(data, undefined, mainName, undefined);
                     updateInProgress = false;
                     $('#loadingBox').hide();
                 });
@@ -126,7 +126,7 @@
                 // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
-                        renderChart(data, compareData);
+                        renderChart(data, compareData, mainName, compareName);
                         updateInProgress = false;
                         $('#loadingBox').hide();
                     });
