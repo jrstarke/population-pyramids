@@ -6,6 +6,10 @@ svg {
     font-family: Arial, sans-serif;
 }
 
+.popover-inner {
+    width: 100%;
+}
+
 path.outline-male {
     fill: none;
     stroke: #63788f;
