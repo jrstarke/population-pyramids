@@ -64,12 +64,27 @@
     var currentCompareId = undefined;
 
     d3.json('/regions', function(regions) {
+        var regionIdLookupTable = {}
+        _.each(regions, function(d) {
+            regionIdLookupTable[d.name.toLowerCase()] = d.id;
+        });
+
         var setupTypeahead = function(id) {
             $(id).typeahead({
                 'source': _.map(regions, function(region) { return region.name; })
             });
             $(id).change(function(e){
                 updatePyramid();
+            });
+            $(id).submit(function(e) {
+                e.preventDefault();
+                updatePyramid();
+            });
+            $(id).keydown(function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    updatePyramid();
+                }
             });
         };
 
@@ -146,19 +161,6 @@
 
         setupTypeahead('#select_main');
         setupTypeahead('#select_compare');
-
-        var regionIdLookupTable = {}
-        _.each(regions, function(d) {
-            regionIdLookupTable[d.name.toLowerCase()] = d.id;
-        });
-
-        var onSubmit = function(e) {
-            e.preventDefault();
-            updatePyramid();
-        };
-
-        $("#select_main").submit(onSubmit);
-        $("#select_compare").submit(onSubmit);
 
         $("#select_main").val('Victoria');
         $("#select_compare").val('Canada');
