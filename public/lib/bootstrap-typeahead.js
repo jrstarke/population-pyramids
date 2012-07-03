@@ -174,6 +174,7 @@
 
             this.$menu
                 .on('click', $.proxy(this.click, this))
+                .on('mousedown', $.proxy(this.click, this))
                 .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
         }
 
