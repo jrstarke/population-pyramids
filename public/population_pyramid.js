@@ -8,7 +8,7 @@ function renderChart(data, compareData, place, comparePlace) {
     var height = outerHeight - margin.top - margin.bottom;
 
     var centerLabelWidth = 50;
-    var gridLabelHeight = 80;
+    var gridLabelHeight = 40;
 
     // sum of population
     var totalMales = d3.nest()
@@ -126,13 +126,7 @@ function renderChart(data, compareData, place, comparePlace) {
             .attr('x', sideWidth / 2)
             .attr('y', 55)
             .attr('text-anchor', 'middle')
-            .text(gender + ', by single year of age,')
-        gridContainer.append('text')
-            .attr('class', 'panelHeader')
-            .attr('x', sideWidth / 2)
-            .attr('y', 85)
-            .attr('text-anchor', 'middle')
-            .text('as percent of the total population')
+            .text(gender + ', by single year of age, as percent of the total population');
     }
 
     // interaction overlay
