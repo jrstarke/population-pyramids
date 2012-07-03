@@ -23,9 +23,9 @@
             </div>
             <h3 id="header">
                 Population pyramid of
-                <input type="text" class="search-query" id="select_main" value="Victoria" tabindex="1"/>
+                <input type="text" class="search-query" id="select_main" tabindex="1"/>
                 <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
-                <input type="text" class="search-query" id="select_compare" value="Canada" tabindex="2"/>
+                <input type="text" class="search-query" id="select_compare" tabindex="2"/>
                 <span class="brand">&nbsp;&nbsp;&nbsp;(line)</span>
             </h3>
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
@@ -160,6 +160,8 @@
         $("#select_main").submit(onSubmit);
         $("#select_compare").submit(onSubmit);
 
+        $("#select_main").val('Victoria');
+        $("#select_compare").val('Canada');
         updatePyramid('Victoria', 'Canada');
     });
 </script>
