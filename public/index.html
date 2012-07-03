@@ -81,9 +81,8 @@
                 updatePyramid();
             });
             $(id).keydown(function(e) {
-                if (e.keyCode == 13) {
-                    e.preventDefault();
-                    updatePyramid();
+                if (e.keyCode == 13 && !$(id).data('typeahead').shown) {
+                     updatePyramid();
                 }
             });
         };
