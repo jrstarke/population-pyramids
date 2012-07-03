@@ -23,9 +23,9 @@
             </div>
             <h3 id="header">
                 Population pyramid of
-                <input type="text" class="search-query" id="select_main" value="Victoria" />
+                <input type="text" class="search-query" id="select_main" tabindex="1"/>
                 <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
-                <input type="text" class="search-query" id="select_compare" value="Canada" />
+                <input type="text" class="search-query" id="select_compare" tabindex="2"/>
                 <span class="brand">&nbsp;&nbsp;&nbsp;(line)</span>
             </h3>
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
@@ -60,6 +60,9 @@
 <script src="/lib/d3.v2.js"></script>
 <script src="/population_pyramid.js"></script>
 <script>
+    var currentMainId = undefined;
+    var currentCompareId = undefined;
+
     d3.json('/regions', function(regions) {
         var setupTypeahead = function(id) {
             $(id).typeahead({
@@ -85,11 +88,6 @@
                 return; // XXX UI elements should be deactivated
             }
 
-            updateInProgress = true;
-
-            $('#chart').empty();
-            $('.popover').remove(); // remove open popovers
-
             if (mainName === undefined) {
                 mainName = $('#select_main').val();
             }
@@ -99,6 +97,18 @@
 
             var mainId = regionIdLookupTable[mainName.toLowerCase()];
             var compareId = regionIdLookupTable[compareName.toLowerCase()];
+
+            if (mainId === currentMainId && compareId === currentCompareId) {
+                return;
+            } else {
+                currentMainId = mainId;
+                currentCompareId = compareId;
+            }
+
+            updateInProgress = true;
+
+            $('#chart').empty();
+            $('.popover').remove(); // remove open popovers
 
             if (mainId === undefined && compareId == undefined) {
                 showMainError(mainName);
@@ -114,7 +124,7 @@
                 $('#loadingBox').show();
 
                 d3.json('/region/' + mainId + '/data.json', function(data) {
-                    renderChart(data);
+                    renderChart(data, undefined, mainName, undefined);
                     updateInProgress = false;
                     $('#loadingBox').hide();
                 });
@@ -126,7 +136,7 @@
                 // TODO parallel loading
                 d3.json('/region/' + mainId + '/data.json', function(data) {
                     d3.json('/region/' + compareId + '/data.json', function(compareData) {
-                        renderChart(data, compareData);
+                        renderChart(data, compareData, mainName, compareName);
                         updateInProgress = false;
                         $('#loadingBox').hide();
                     });
@@ -150,6 +160,8 @@
         $("#select_main").submit(onSubmit);
         $("#select_compare").submit(onSubmit);
 
+        $("#select_main").val('Victoria');
+        $("#select_compare").val('Canada');
         updatePyramid('Victoria', 'Canada');
     });
 </script>

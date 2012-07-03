@@ -1,9 +1,14 @@
 body {
     padding-top: 15px;
+    padding-bottom: 20px;
 }
 
 svg {
     font-family: Arial, sans-serif;
+}
+
+.popover-inner {
+    width: 100%;
 }
 
 path.outline-male {
@@ -56,7 +61,7 @@ line.tick {
 }
 
 .panelHeader {
-    font-size: 16px;
+    font-size: 14px;
     stroke: none;
     fill: gray;
 }

@@ -1,4 +1,4 @@
-function renderChart(data, compareData) {
+function renderChart(data, compareData, place, comparePlace) {
 
     // chart settings
     var margin = {top: 40, right: 10, bottom: 20, left: 10};
@@ -8,7 +8,7 @@ function renderChart(data, compareData) {
     var height = outerHeight - margin.top - margin.bottom;
 
     var centerLabelWidth = 50;
-    var gridLabelHeight = 80;
+    var gridLabelHeight = 40;
 
     // sum of population
     var totalMales = d3.nest()
@@ -66,7 +66,7 @@ function renderChart(data, compareData) {
     function renderPanel(type, xTranslate, gender, numberOfPeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
 
-        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender)
+        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender + ' (' + place + ')')
             .attr("x", sideWidth / 2)
             .attr("y", 15)
             .attr("text-anchor", "middle")
@@ -126,13 +126,7 @@ function renderChart(data, compareData) {
             .attr('x', sideWidth / 2)
             .attr('y', 55)
             .attr('text-anchor', 'middle')
-            .text(gender + ', by single year of age,')
-        gridContainer.append('text')
-            .attr('class', 'panelHeader')
-            .attr('x', sideWidth / 2)
-            .attr('y', 85)
-            .attr('text-anchor', 'middle')
-            .text('as percent of the total population')
+            .text(gender + ', by single year of age, as percent of the total population');
     }
 
     // interaction overlay
@@ -147,10 +141,14 @@ function renderChart(data, compareData) {
         .attr('stroke', 'none')
         .attr('pointer-events','visible')
         .attr('title', function(d) { return 'Age ' + d.age; })
-        .attr('data-content', function(d) {
-            return '<b>' + d.total.people + ' people (' + d3.round(d.total.percentOfTotal, 2) + '% of population)' + '</b><br/>'
-                + d.male.people + ' men (' + d3.round(d.male.percentOfTotal, 2) + '% of population)' + '<br/>'
-                + d.female.people + ' women (' + d3.round(d.female.percentOfTotal, 2) + '% of population)'
+        .attr('data-content', function(d, i) {
+            return '<div style="white-space:nowrap;"><b>' + d.total.people + ' people, ' + d3.round(d.total.percentOfTotal, 2) + '% of population' + '</b>'
+                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
+                + '<div style="white-space:nowrap;">' + d.male.people + ' males,' + d3.round(d.male.percentOfTotal, 2) + '% of population'
+                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].male.percentOfTotal, 2) + '%)' : '')
+                +  '</div>'
+                + '<div style="white-space:nowrap;">' + d.female.people + ' females,' + d3.round(d.female.percentOfTotal, 2) + '% of population'
+                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].female.percentOfTotal, 2) + '%)' : '') +  '</div>'
         })
         .on('mouseover', function(d,i) {
             d3.select(this).attr('fill', 'rgba(0,0,0,.15)');
