@@ -179,7 +179,6 @@
 
         , move: function (e) {
             switch(e.keyCode) {
-                case 9: // tab
                 case 13: // enter
                 case 27: // escape
                     e.preventDefault()
@@ -200,7 +199,7 @@
         }
 
         , keydown: function (e) {
-            this.suppressKeyPressRepeat = !~[40,38,9,13,27].indexOf(e.keyCode)
+            this.suppressKeyPressRepeat = !~[40,38,13,27].indexOf(e.keyCode)
             this.move(e)
         }
 
@@ -215,7 +214,6 @@
                 case 38: // up arrow
                     break
 
-                case 9: // tab
                 case 13: // enter
                     if (!this.shown) return
                     this.select()
