@@ -142,7 +142,6 @@ function renderChart(data, compareData, place, comparePlace) {
         .attr('pointer-events','visible')
         .attr('title', function(d) { return 'Age ' + d.age; })
         .attr('data-content', function(d, i) {
-            console.log(compareData[i]);
             return '<div style="white-space:nowrap;"><b>' + d.total.people + ' people, ' + d3.round(d.total.percentOfTotal, 2) + '% of population' + '</b>'
                 + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
                 + '<div style="white-space:nowrap;">' + d.male.people + ' males,' + d3.round(d.male.percentOfTotal, 2) + '% of population'
