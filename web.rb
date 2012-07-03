@@ -10,14 +10,18 @@ get '/' do
 end
 
 get '/regions' do
+  region_totals = DataLoader.region_totals()
   attribs = DataLoader.buildDictionary()
   
   output = []
   regions = attribs['geo']
   regions.each_key do |key| 
     name = regions[key]
-    output = output + [{:name => name, :id => key}]
+    population = region_totals[key]
+    output = output + [{:name => name, :id => key, :population => population}]
   end
+  
+  output = output.sort { |x,y| y[:population] <=> x[:population] }
   
   JSON.dump(output)  
 end
@@ -32,7 +36,8 @@ end
 get '/region/:region_id/data.json' do
   region_id = params[:region_id]
   
-  regions = DataLoader.loadData()
+  regions = DataLoader.regions()
+  #regions = DataLoader.loadData()
   
   region = regions[region_id]
   JSON.dump(region)

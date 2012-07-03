@@ -2,27 +2,52 @@ require 'nokogiri'
 require 'json'
 
 module DataLoader
-  @@regions = nil
+  @@data = nil
+  @@attribs = nil
    
   def self.loadData()
-    if @@regions.nil?
+    if @@data.nil?
       unless File.exist? "data.json"
-        @@regions = self.loadRegions()
+        @@data = self.loadRegions()
         
-        File.open('data.json', 'w') {|f| f.write(JSON.dump(@@regions)) }
-        return @@regions
+        File.open('data.json', 'w') {|f| f.write(JSON.dump(@@data)) }
+        return @@data
       else
         file = File.open('data.json').read
-        @@regions = JSON.parse(file)
-        return @@regions
+        @@data = JSON.parse(file)
+        return @@data
       end
     else
-      return @@regions    
+      return @@data    
     end
   end
   
+  def self.regions()
+    if @@data.nil?
+      @@data = loadData()
+    end
+    
+    return @@data['regions']
+  end
+  
+  def self.region_totals()
+    if @@data.nil?
+      @@data = loadData()
+    end
+    
+    return @@data['region_totals']
+  end
+  
+  def self.attribs()
+    if @@attribs.nil?
+      @@attribs = buildDictionary()
+    end
+    
+    return @@attribs
+  end  
+  
   def self.loadRegions()
-    attribs = buildDictionary()
+    attrib = attribs()
     
     puts "Starting load"
     doc = Nokogiri::XML::Reader(File.open("data/Generic_98-311-XCB2011021.xml"))
@@ -75,12 +100,12 @@ module DataLoader
             
             region_id = node.attribute("value")
             element["region_id"] = region_id
-            element["region"] = attribs["geo"][region_id]
+            element["region"] = attrib["geo"][region_id]
             
           elsif node.attribute("concept") == "AGE"
             
             age_id = node.attribute("value")
-            age = attribs["age"][age_id]
+            age = attrib["age"][age_id]
             age = age.gsub("Total - Age","total")
             age = age.gsub("Under 1 year","<1")
             age = age.gsub("100 years and over","100+")
@@ -92,7 +117,7 @@ module DataLoader
           elsif node.attribute('concept') == 'Sex'
             
             sex_id = node.attribute('value')
-            element['sex'] = attribs['sex'][sex_id].downcase.sub(" - sex",'') 
+            element['sex'] = attrib['sex'][sex_id].downcase.sub(" - sex",'') 
             
           end  
         end
@@ -105,10 +130,14 @@ module DataLoader
       
     end
     puts regions
-    output = {}
+    formatted_regions = {}
     regions.each_key do |region_id|
-      output[region_id] = regions[region_id].values
+      formatted_regions[region_id] = regions[region_id].values
     end
+    output = {
+      'regions' => formatted_regions,
+      'region_totals' => region_total,
+    }
     
     return output
   end
