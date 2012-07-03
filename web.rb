@@ -10,6 +10,7 @@ get '/' do
 end
 
 get '/regions' do
+  provs = {"48" => "AB", "59" => "BC", "46" => "MB", "13" => "NB", "10" => "NL", "61" => "NT", "12" => "NS", "62" => "NU", "35" => "ON", "11" => "PE", "24" => "QC", "47" => "SK", "60" => "YT"}
   region_totals = DataLoader.region_totals()
   attribs = DataLoader.buildDictionary()
   
@@ -17,6 +18,15 @@ get '/regions' do
   regions = attribs['geo']
   regions.each_key do |key| 
     name = regions[key]
+    if key.length > 2
+      
+      p_key = key[0,2]
+      prov = provs[p_key]
+      if prov.nil? 
+        return 'p_key=' + p_key + ' key=' + key
+      end
+      name = name + ", " + prov 
+    end 
     population = region_totals[key]
     output = output + [{:name => name, :id => key, :population => population}]
   end
@@ -40,5 +50,7 @@ get '/region/:region_id/data.json' do
   #regions = DataLoader.loadData()
   
   region = regions[region_id]
+  puts region
+  #region = DataLoader.region(region_id)
   JSON.dump(region)
 end

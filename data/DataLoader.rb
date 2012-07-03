@@ -46,11 +46,107 @@ module DataLoader
     return @@attribs
   end  
   
+  def self.region(wanted_region_id)
+    attrib = attribs()
+    
+    puts "Starting load"
+    doc = Nokogiri::XML::Reader(File.open("data/Generic_98-311-XCB2011023.xml"))
+    puts "File handle loaded"
+    puts "Beginning parse"
+    
+    hash_maker = proc do |h, k|
+      h[k] = Hash.new(&hash_maker)
+    end
+    
+    region = Hash.new(&hash_maker)
+    
+    region_total = nil
+    
+    element = nil
+    
+    doc.each do |node|
+      
+      if node.name == "generic:Series"
+        
+        if node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+          element = {}
+        
+        elsif element and node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT
+          if element.include? 'age'
+            region_id = element['region_id']
+            age = element['age']
+            sex = element['sex']
+            people = element['value']
+            
+            if age == 'total'
+              region_total = people.to_f
+            else
+              region[age]['age'] = age
+              region[age][sex] = {'people' => people}
+               
+              total = region_total
+              if total
+                percent = (people.to_f / total) * 100
+                region[age][sex]['percentOfTotal'] = percent   
+              end
+            end
+            element = nil
+            #print '.'
+          end  
+        end
+        
+      elsif element and node.name == "generic:Value"
+        
+        if node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
+          
+          if node.attribute("concept") == "GEO"
+            
+            region_id = node.attribute("value")
+            if region_id == wanted_region_id
+              element["region_id"] = region_id
+              element["region"] = attrib["geo"][region_id]
+            else
+              element = nil
+            end   
+            
+          elsif node.attribute("concept") == "AGE"
+            
+            age_id = node.attribute("value")
+            age = attrib["age"][age_id]
+            age = age.gsub("Total - Age","total")
+            age = age.gsub("Under 1 year","<1")
+            age = age.gsub("100 years and over","100+")
+            
+            if /^\d*$|total|\<1|100\+/.match(age)
+              element["age"] = age
+            end  
+          
+          elsif node.attribute('concept') == 'Sex'
+            
+            sex_id = node.attribute('value')
+            element['sex'] = attrib['sex'][sex_id].downcase.sub(" - sex",'') 
+            
+          end  
+        end
+        
+      elsif element and node.name == 'generic:ObsValue'
+        
+        element['value'] = node.attribute('value')
+      
+      end
+      
+    end
+ 
+    formatted_region = region.values
+    
+    return formatted_region
+  end
+  
   def self.loadRegions()
     attrib = attribs()
     
     puts "Starting load"
-    doc = Nokogiri::XML::Reader(File.open("data/Generic_98-311-XCB2011021.xml"))
+    doc = Nokogiri::XML::Reader(File.open("data/Generic_98-311-XCB2011023.xml"))
     puts "File handle loaded"
     puts "Beginning parse"
     
@@ -89,6 +185,7 @@ module DataLoader
                 regions[region_id][age][sex]['percentOfTotal'] = percent   
               end
             end
+            #print '.'
           end  
         end
         
@@ -129,7 +226,7 @@ module DataLoader
       end
       
     end
-    puts regions
+ 
     formatted_regions = {}
     regions.each_key do |region_id|
       formatted_regions[region_id] = regions[region_id].values
@@ -144,7 +241,7 @@ module DataLoader
   
   def self.buildDictionary(language = "en")
     dict = {}
-    doc = Nokogiri::XML(File.open("data/Structure_98-311-XCB2011021.xml"))
+    doc = Nokogiri::XML(File.open("data/Structure_98-311-XCB2011023.xml"))
     doc.remove_namespaces!
     
     doc.css('CodeList').each do |codeList|
@@ -176,7 +273,11 @@ module DataLoader
 end
 
 if __FILE__ == $0
-  listings = DataLoader.loadData()
-  puts listings.length
+  #listings = DataLoader.loadData()
+  #puts listings.length
+
+  region = DataLoader.region('5941812')  
+
+  puts region
   #puts DataLoader.findAttributeValueForKey("sex","1")
 end
