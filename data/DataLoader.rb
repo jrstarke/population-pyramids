@@ -2,48 +2,63 @@ require 'nokogiri'
 require 'json'
 
 module DataLoader
-  @@data = nil
+  @@regions = nil
+  @@region_totals = nil
   @@attribs = nil
    
   def self.loadData()
-    if @@data.nil?
-      unless File.exist? "data.json"
-        @@data = self.loadRegions()
+    if @@regions.nil? or @@region_totals.nil?
+      unless File.exist? "regions.json" and File.exist? "region_totals.json"
+        @@regions, @@region_totals = self.loadRegions()
         
-        File.open('data.json', 'w') {|f| f.write(JSON.dump(@@data)) }
-        return @@data
+        File.open('regions.json', 'w') {|f| f.write(JSON.dump(@@regions)) }
+        File.open('region_totals.json', 'w') {|f| f.write(JSON.dump(@@region_totals)) }
+        return @@regions, @@region_totals
       else
-        file = File.open('data.json').read
-        @@data = JSON.parse(file)
-        return @@data
+        file = File.open('regions.json').read
+        @@regions = JSON.parse(file)
+        
+        file = File.open('region_totals.json').read
+        @@region_totals = JSON.parse(file)
+        
+        return @@regions, @@region_totals
       end
     else
-      return @@data    
+      return @@regions, @@region_totals    
     end
   end
   
   def self.regions()
-    if @@data.nil?
-      @@data = loadData()
+    if @@regions.nil?
+      loadData()
     end
     
-    return @@data['regions']
+    return @@regions
   end
   
   def self.region_totals()
-    if @@data.nil?
-      @@data = loadData()
+    if @@region_totals.nil?
+      loadData()
     end
     
-    return @@data['region_totals']
+    return @@region_totals
   end
   
   def self.attribs()
     if @@attribs.nil?
-      @@attribs = buildDictionary()
+      unless File.exist? "attributes.json"
+        @@attribs = self.buildDictionary()
+        
+        File.open('attributes.json', 'w') {|f| f.write(JSON.dump(@@attribs)) }
+        return @@attribs
+      else
+        file = File.open('attributes.json').read
+        @@attribs = JSON.parse(file)
+        return @@attribs
+      end
+    else
+      return @@attribs    
     end
-    
-    return @@attribs
   end  
   
   def self.region(wanted_region_id)
@@ -231,12 +246,8 @@ module DataLoader
     regions.each_key do |region_id|
       formatted_regions[region_id] = regions[region_id].values
     end
-    output = {
-      'regions' => formatted_regions,
-      'region_totals' => region_total,
-    }
     
-    return output
+    return formatted_regions, region_total
   end
   
   def self.buildDictionary(language = "en")
