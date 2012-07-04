@@ -283,12 +283,48 @@ module DataLoader
   end   
 end
 
+def precomputeRegionsFile()
+  provs = {"48" => "AB", "59" => "BC", "46" => "MB", "13" => "NB", "10" => "NL", "61" => "NT", "12" => "NS", "62" => "NU", "35" => "ON", "11" => "PE", "24" => "QC", "47" => "SK", "60" => "YT"}
+  region_totals = DataLoader.region_totals()
+  attribs = DataLoader.buildDictionary()
+  
+  output = []
+  regions = attribs['geo']
+  regions.each_key do |key| 
+    name = regions[key]
+    if key.length > 2
+      
+      p_key = key[0,2]
+      prov = provs[p_key]
+      if prov.nil? 
+        return 'p_key=' + p_key + ' key=' + key
+      end
+      name = name + ", " + prov 
+    end 
+    population = region_totals[key]
+    output = output + [{:name => name, :id => key, :population => population}]
+  end
+  
+  output = output.sort { |x,y| y[:population] <=> x[:population] }
+  
+  File.open('public/regions.json', 'w') {|f| f.write(JSON.dump(output)) }
+end
+
+def precomputeRegions()
+  regions = DataLoader.regions()
+  
+  regions.each_key do |key|
+    region = regions[key]
+    
+    File.open('public/region/' + key + '.json', 'w') {|f| f.write(JSON.dump(region)) }
+  end
+end
+
 if __FILE__ == $0
   #listings = DataLoader.loadData()
   #puts listings.length
 
-  region = DataLoader.region('5941812')  
-
-  puts region
+  precomputeRegionsFile()
+  precomputeRegions()
   #puts DataLoader.findAttributeValueForKey("sex","1")
 end

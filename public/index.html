@@ -63,7 +63,7 @@
     var currentMainId = undefined;
     var currentCompareId = undefined;
 
-    d3.json('/regions', function(regions) {
+    d3.json('/regions.json', function(regions) {
         var regionIdLookupTable = {}
         _.each(regions, function(d) {
             regionIdLookupTable[d.name.toLowerCase()] = d.id;
@@ -137,7 +137,7 @@
                 showCompareError(compareName);
                 $('#loadingBox').show();
 
-                d3.json('/region/' + mainId + '/data.json', function(data) {
+                d3.json('/region/' + mainId + '.json', function(data) {
                     renderChart(data, undefined, mainName, undefined);
                     updateInProgress = false;
                     $('#loadingBox').hide();
@@ -148,8 +148,8 @@
                 $('#loadingBox').show();
 
                 // TODO parallel loading
-                d3.json('/region/' + mainId + '/data.json', function(data) {
-                    d3.json('/region/' + compareId + '/data.json', function(compareData) {
+                d3.json('/region/' + mainId + '.json', function(data) {
+                    d3.json('/region/' + compareId + '.json', function(compareData) {
                         renderChart(data, compareData, mainName, compareName);
                         updateInProgress = false;
                         $('#loadingBox').hide();
