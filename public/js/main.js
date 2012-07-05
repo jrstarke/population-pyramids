@@ -100,7 +100,7 @@ d3.json('/regions.json', function(regions) {
     };
 
     var updateTitle = function(mainName, compareName) {
-        window.document.title = + mainName + " compared to " + compareName + " - Population Pyramids" ;
+        window.document.title = mainName + " compared to " + compareName + " - Population Pyramids" ;
     };
 
     var updateControls = function(mainName, compareName) {
