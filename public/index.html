@@ -28,18 +28,6 @@
                 <input type="text" class="search-query" id="select_compare" tabindex="2"/>
                 <span class="brand">&nbsp;&nbsp;&nbsp;(line)</span>
             </h3>
-            <!-- AddThis Button BEGIN -->
-			<div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="position:absolute;">
-			<a class="addthis_button_facebook"></a>
-			<a class="addthis_button_twitter"></a>
-			<a class="addthis_button_google_plusone_badge"></a>
-			<a class="addthis_button_email"></a>
-			<a class="addthis_button_print"></a>
-			<a class="addthis_button_compact"></a>
-			</div>
-			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
-			<!-- AddThis Button END -->
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
                 <h4 class="alert-heading">Loading...</h4>
                 <p>The population pyramid should show in a second.</p>
@@ -52,6 +40,18 @@
                 <h4 class="alert-heading" id="compareErrorMessage"></h4>
                 <p>Check for typos or try entering a different place.</p>
             </div>
+            <!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="position:absolute;">
+			<a class="addthis_button_facebook"></a>
+			<a class="addthis_button_twitter"></a>
+			<a class="addthis_button_google_plusone_badge"></a>
+			<a class="addthis_button_email"></a>
+			<a class="addthis_button_print"></a>
+			<a class="addthis_button_compact"></a>
+			</div>
+			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
+			<!-- AddThis Button END -->
             <div id="chart"></div>
         </div>
     </div>
@@ -169,6 +169,7 @@
                 });
             }
             window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
+            window.document.title = "Population Pyramids - " + mainName + " compared to " + compareName;
         }
 
         setupTypeahead('#select_main');
@@ -176,9 +177,10 @@
         
         if (window.location.hash)
         {
-        	var location = window.location.hash;
-        	location = location.replace('#','').replace('+',' ');
-        	var pieces = location.split('&');
+        	var comp = window.location.hash;
+        	comp = comp.replace('#','')
+        	comp = comp.replace(/\+/g,' ');
+        	var pieces = comp.split('&');
         	
         	$("#select_main").val(pieces[0]);
         	$("#select_compare").val(pieces[1]);	
