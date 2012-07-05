@@ -67,7 +67,7 @@
                 //parsed full URL instead of getting location.hash because Firefox decode hash value (and all the other browsers don't)
                 //also because of IE8 bug with hash query in local file [issue #6]
                 var result = _hashValRegexp.exec( hasher.getURL() );
-                return (result && result[1])? decodeURIComponent(result[1]) : '';
+                return (result && result[1])? decodeURI(result[1]) : '';
             }
 
             function _getFrameHash(){
@@ -93,7 +93,7 @@
             }
 
             function _registerChange(newHash, isReplace){
-                newHash = decodeURIComponent(newHash); //fix IE8 while offline
+                newHash = decodeURI(newHash); //fix IE8 while offline
                 if(_hash !== newHash){
                     var oldHash = _hash;
                     _hash = newHash; //should come before event dispatch to make sure user can get proper value inside event handler
