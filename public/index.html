@@ -200,6 +200,8 @@
             };
             
             _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
+            _gat._getTrackerByName()._trackEvent('Region View', mainName, "Main Region");
+            _gat._getTrackerByName()._trackEvent('Region View', compareName, "Comparison Region");
         }
 
         setupTypeahead('#select_main');
