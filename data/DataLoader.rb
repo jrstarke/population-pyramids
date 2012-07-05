@@ -252,6 +252,7 @@ module DataLoader
   
   def self.buildDictionary(language = "en")
     dict = {}
+    dict.default = {}
     doc = Nokogiri::XML(File.open("data/Structure_98-311-XCB2011023.xml"))
     doc.remove_namespaces!
     
@@ -268,7 +269,9 @@ module DataLoader
         geo_type = ''
         title = code.css('AnnotationTitle').first
         if title
-          geo_type = ' (' + title.content.strip + ')'
+          titles = dict[id+'_title']
+          titles[value] = title.content.strip
+          dict[id+'_title'] = titles
         end
         
         code.xpath('Description').each do |desc|
@@ -276,10 +279,10 @@ module DataLoader
           
           if lang 
             if lang == language
-              codeDesc = desc.content.strip + geo_type
+              codeDesc = desc.content.strip
             end  
           else
-            codeDesc = desc.content.strip + geo_type
+            codeDesc = desc.content.strip
           end
         end
         codeListDict[value] = codeDesc     
@@ -307,7 +310,7 @@ def precomputeRegionsFile()
       if prov.nil? 
         return 'p_key=' + p_key + ' key=' + key
       end
-      name = name + ", " + prov 
+      name = name + ", " + prov + (attribs['geo_title'][key] ? ' (' + attribs['geo_title'][key] + ')' : '')
     end 
     population = region_totals[key]
     output = output + [{:name => name, :id => key, :population => population}]
@@ -332,9 +335,9 @@ if __FILE__ == $0
   #listings = DataLoader.loadData()
   #puts listings.length
 
-  DataLoader.attribs()
+  #DataLoader.attribs()
 
-  #precomputeRegionsFile()
+  precomputeRegionsFile()
   #precomputeRegions()
   #puts DataLoader.findAttributeValueForKey("sex","1")
 end
