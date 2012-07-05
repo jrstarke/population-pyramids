@@ -31,10 +31,16 @@ d3.json('/regions.json', function(regions) {
         $('#compareErrorBox').show();
     };
 
+    var cache = {};
     var loadAgeProfile = function(id, callback) {
-        d3.json('/region/' + id + '.json', function(data) {
-            callback(data);
-        });
+        if (cache.hasOwnProperty(id)) {
+            callback(cache[id]);
+        } else {
+            d3.json('/region/' + id + '.json', function(data) {
+                cache[id] = data;
+                callback(data);
+            });
+        }
     };
 
     var updatePyramid = function(mainName, compareName) {
