@@ -31,6 +31,12 @@ d3.json('/regions.json', function(regions) {
         $('#compareErrorBox').show();
     };
 
+    var loadAgeProfile = function(id, callback) {
+        d3.json('/region/' + id + '.json', function(data) {
+            callback(data);
+        });
+    };
+
     var updatePyramid = function(mainName, compareName) {
         var mainId = regionIdLookupTable[mainName.toLowerCase()];
         var compareId = regionIdLookupTable[compareName.toLowerCase()];
@@ -62,7 +68,7 @@ d3.json('/regions.json', function(regions) {
         } else if (compareId === undefined) {
             $('#loadingBox').show();
 
-            d3.json('/region/' + mainId + '.json', function(data) {
+            loadAgeProfile(mainId, function(data) {
                 renderChart(data, undefined, mainName, undefined);
                 $('#loadingBox').hide();
             });
@@ -70,8 +76,8 @@ d3.json('/regions.json', function(regions) {
             $('#loadingBox').show();
 
             // TODO parallel loading
-            d3.json('/region/' + mainId + '.json', function(data) {
-                d3.json('/region/' + compareId + '.json', function(compareData) {
+            loadAgeProfile(mainId, function(data) {
+                loadAgeProfile(compareId, function(compareData) {
                     renderChart(data, compareData, mainName, compareName);
                     $('#loadingBox').hide();
                 });
