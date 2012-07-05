@@ -78,6 +78,13 @@
                 <h4 class="alert-heading" id="mainErrorMessage"></h4>
                 <p>Check for typos or try entering a different place. The data set contains Canadian places (Canada, provinces, agglomerations and municipalities).</p>
             </div>
+            <div id="unsupportedBrowser" class="alert alert-block alert-error" style="display:none;">
+                <h4 class="alert-heading">Unsupported Browser</h4>
+                <p>Your browser does not support SVG. Please try
+                    <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a>,
+                    <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>, or
+                    <a href="http://www.apple.com/safari/">Safari</a>.</p>
+            </div>
             <div id="compareErrorBox" class="alert alert-block alert-warn" style="display:none;">
                 <h4 class="alert-heading" id="compareErrorMessage"></h4>
                 <p>Check for typos or try entering a different place. The data set contains Canadian places (Canada, provinces, agglomerations and municipalities).</p>
@@ -95,6 +102,7 @@
         </p>
     </footer>
 </div>
+<script src="/js/modernizr.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript">
     if (typeof $ == 'undefined') {
