@@ -13,34 +13,23 @@ svg {
 
 path.outline-male {
     fill: none;
-    stroke: #63788f;
+    stroke: #1a316b;
     stroke-width: 2;
 }
-
-circle.outline-male {
-    fill: #63788f;
-    stroke: #63788f;
-}
-
 path.outline-female {
      fill: none;
-     stroke: #8f6d8f;
+     stroke: #7f1b55;
      stroke-width: 2;
  }
 
-circle.outline-female {
-    fill: #8f6d8f;
-    stroke: #8f6d8f;
-}
-
 .male {
-    fill: #a6caf0;
-    stroke: #a6caf0;
+    fill: #97a8d2;
+    stroke: #97a8d2;
 }
 
 .female {
-    fill: #cc9ccc;
-    stroke: #cc9ccc;
+    fill: #e19ac4;
+    stroke: #e19ac4;
 }
 
 line.axis {
