@@ -36,6 +36,17 @@
                     You can move the mouse over the age group in the pyramid to get detailed information.
                 </p>
             </div>
+            <div id="share" style="position: fixed; top: 200px;">
+                <div class="addthis_toolbox addthis_floating_style addthis_16x16_style" style="border: 1px solid lightgray;">
+                    <a class="addthis_button_facebook"></a>
+                    <a class="addthis_button_twitter"></a>
+                    <a class="addthis_button_compact"></a>
+                </div>
+                <script type="text/javascript">var addthis_config = {
+                    "data_track_addressbar":true, data_ga_social : true,data_ga_property: 'UA-69155-30'
+                };</script>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
+            </div>
             <h3 id="header">
                 Population pyramid of
                 <input type="text" class="search-query" id="select_main" tabindex="1"/>
@@ -55,22 +66,6 @@
                 <h4 class="alert-heading" id="compareErrorMessage"></h4>
                 <p>Check for typos or try entering a different place.</p>
             </div>
-            <!-- AddThis Button BEGIN -->
-			<div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="position:absolute;">
-			<a class="addthis_button_facebook"></a>
-			<a class="addthis_button_twitter"></a>
-			<a class="addthis_button_google_plusone_share"></a>
-			<a class="addthis_button_email"></a>
-			<a class="addthis_button_print"></a>
-			<a class="addthis_button_compact"></a>
-			</div>
-			<script type="text/javascript">var addthis_config = {
-				"data_track_addressbar":true,
-				data_ga_social : true,
-				 data_ga_property: 'UA-69155-30',
-				 };</script>
-			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
-			<!-- AddThis Button END -->
             <div id="chart"></div>
         </div>
     </div>
