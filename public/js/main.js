@@ -178,5 +178,5 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
     });
 } else {
     $('#unsupportedBrowser').show();
-    $('.header').hide();
+    $('#inputBar').hide();
 }
