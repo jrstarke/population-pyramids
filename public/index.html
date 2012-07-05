@@ -168,14 +168,30 @@
                     });
                 });
             }
+            window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
         }
 
         setupTypeahead('#select_main');
         setupTypeahead('#select_compare');
-
-        $("#select_main").val('Capital, BC');
-        $("#select_compare").val('Canada');
-        updatePyramid('Capital, BC', 'Canada');
+        
+        if (window.location.hash)
+        {
+        	var location = window.location.hash;
+        	location = location.replace('#','').replace('+',' ');
+        	var pieces = location.split('&');
+        	
+        	$("#select_main").val(pieces[0]);
+        	$("#select_compare").val(pieces[1]);	
+        	
+        	updatePyramid(pieces[0],pieces[1]);
+        }
+        else
+        {
+	        $("#select_main").val('Capital, BC');
+        	$("#select_compare").val('Canada');	
+        	
+        	updatePyramid('Capital, BC', 'Canada');
+        }
     });
 </script>
 </body>
