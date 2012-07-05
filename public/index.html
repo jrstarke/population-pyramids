@@ -5,6 +5,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=9">
 	<link rel="stylesheet" type="text/css" href="/lib/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="/population_pyramid.css" />
+	
+	<script type="text/javascript">
+	
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-69155-30']);
+	  _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	
+	</script>
 </head>
 <body>
 <div class="container">
@@ -49,7 +63,7 @@
 			<a class="addthis_button_print"></a>
 			<a class="addthis_button_compact"></a>
 			</div>
-			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true, "data_ga_social" : true, "data_ga_property": 'UA-69155-30'};</script>
 			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
 			<!-- AddThis Button END -->
             <div id="chart"></div>
@@ -170,6 +184,8 @@
             }
             window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
             window.document.title = "Population Pyramids - " + mainName + " compared to " + compareName;
+            
+            _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
         }
 
         setupTypeahead('#select_main');
