@@ -66,7 +66,7 @@ function renderChart(data, compareData, place, comparePlace) {
     function renderPanel(type, xTranslate, gender, numberOfPeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
 
-        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender + ' (' + place + ')')
+        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender + ' in ' + place)
             .attr("x", sideWidth / 2)
             .attr("y", 15)
             .attr("text-anchor", "middle")
@@ -140,15 +140,15 @@ function renderChart(data, compareData, place, comparePlace) {
         .attr('fill', 'none')
         .attr('stroke', 'none')
         .attr('pointer-events','visible')
-        .attr('title', function(d) { return 'Age ' + d.age; })
+        .attr('title', function(d) { return 'Age ' + d.age + ' in ' + place; })
         .attr('data-content', function(d, i) {
             return '<div style="white-space:nowrap;"><b>' + d.total.people + ' people, ' + d3.round(d.total.percentOfTotal, 2) + '% of population' + '</b>'
-                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
                 + '<div style="white-space:nowrap;">' + d.male.people + ' males,' + d3.round(d.male.percentOfTotal, 2) + '% of population'
-                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].male.percentOfTotal, 2) + '%)' : '')
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].male.percentOfTotal, 2) + '%)' : '')
                 +  '</div>'
                 + '<div style="white-space:nowrap;">' + d.female.people + ' females,' + d3.round(d.female.percentOfTotal, 2) + '% of population'
-                + ((compareData !== undefined) ? ' (' + comparePlace + ' ' + d3.round(compareData[i].female.percentOfTotal, 2) + '%)' : '') +  '</div>'
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].female.percentOfTotal, 2) + '%)' : '') +  '</div>'
         })
         .on('mouseover', function(d,i) {
             d3.select(this).attr('fill', 'rgba(0,0,0,.15)');
