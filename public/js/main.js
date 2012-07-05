@@ -94,7 +94,10 @@ d3.json('/regions.json', function(regions) {
                 });
             });
         }
-        window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
+
+        updateUrl(mainName, compareName);
+
+        // window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
         window.document.title = "Population Pyramids - " + mainName + " compared to " + compareName;
 
         addthis_share = {
@@ -114,23 +117,31 @@ d3.json('/regions.json', function(regions) {
     setupTypeahead('#select_main');
     setupTypeahead('#select_compare');
 
-    if (window.location.hash)
-    {
-        var comp = window.location.hash;
-        comp = comp.replace('#','')
-        comp = comp.replace(/\+/g,' ');
-        var pieces = comp.split('&');
-
-        $("#select_main").val(pieces[0]);
-        $("#select_compare").val(pieces[1]);
-
-        updatePyramid(pieces[0],pieces[1]);
+    // routing
+    var updateUrl = function(mainName, compareName) {
+        hasher.setHash(encodeURIComponent(mainName) + '/' + encodeURIComponent(compareName));
     }
-    else
-    {
-        $("#select_main").val('Capital, BC (CD)');
-        $("#select_compare").val('Canada');
 
-        updatePyramid('Capital, BC (CD)', 'Canada');
+    crossroads.addRoute('/{place}/{comparisonPlace}', function(place, comparisonPlace){
+        place = decodeURIComponent(place);
+        comparisonPlace = decodeURIComponent(comparisonPlace);
+
+        $("#select_main").val(place);
+        $("#select_compare").val(comparisonPlace);
+
+        updatePyramid(place, comparisonPlace);
+    });
+    crossroads.bypassed.add(function() {
+        // if we cannot match the route, reset to default
+        updateUrl('Capital, BC (CD)', 'Canada');
+    });
+
+    var parseHash = function(newHash, oldHash) {
+        crossroads.parse(newHash);
     }
+    hasher.initialized.add(parseHash);
+    hasher.changed.add(parseHash);
+    hasher.init();
+
 });
+
