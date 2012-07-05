@@ -1,7 +1,4 @@
 d3.json('/regions.json', function(regions) {
-    var currentMainId = undefined;
-    var currentCompareId = undefined;
-
     var regionIdLookupTable = {}
     _.each(regions, function(d) {
         regionIdLookupTable[d.name.toLowerCase()] = d.id;
@@ -34,55 +31,48 @@ d3.json('/regions.json', function(regions) {
         $('#compareErrorBox').show();
     };
 
-    var updateInProgress = false;
     var updatePyramid = function(mainName, compareName) {
-        if (updateInProgress) {
-            return; // XXX UI elements should be deactivated
-        }
-
         var mainId = regionIdLookupTable[mainName.toLowerCase()];
         var compareId = regionIdLookupTable[compareName.toLowerCase()];
 
-        if (mainId === currentMainId && compareId === currentCompareId) {
-            return;
-        } else {
-            currentMainId = mainId;
-            currentCompareId = compareId;
-        }
-
-        updateInProgress = true;
-
-        $('#chart').empty();
-        $('.popover').remove(); // remove open popovers
-
+        // update error boxes
         if (mainId === undefined && compareId == undefined) {
             showMainError(mainName);
             showCompareError(compareName);
-            updateInProgress = false;
         } else if (mainId === undefined) {
             showMainError(mainName);
             $('#compareErrorBox').hide();
-            updateInProgress = false;
         } else if (compareId === undefined) {
             $('#mainErrorBox').hide();
             showCompareError(compareName);
+        } else {
+            $('#mainErrorBox').hide();
+            $('#compareErrorBox').hide();
+        }
+
+        // remove old chart
+        $('#chart').empty();
+        $('.popover').remove(); // remove open popovers
+
+        // update chart config
+        if (mainId === undefined && compareId == undefined) {
+            ;
+        } else if (mainId === undefined) {
+            ;
+        } else if (compareId === undefined) {
             $('#loadingBox').show();
 
             d3.json('/region/' + mainId + '.json', function(data) {
                 renderChart(data, undefined, mainName, undefined);
-                updateInProgress = false;
                 $('#loadingBox').hide();
             });
         } else {
-            $('#mainErrorBox').hide();
-            $('#compareErrorBox').hide();
             $('#loadingBox').show();
 
             // TODO parallel loading
             d3.json('/region/' + mainId + '.json', function(data) {
                 d3.json('/region/' + compareId + '.json', function(compareData) {
                     renderChart(data, compareData, mainName, compareName);
-                    updateInProgress = false;
                     $('#loadingBox').hide();
                 });
             });
