@@ -69,6 +69,18 @@ line.tick {
     font-weight: bold;
 }
 
+.panelHeader-small-male {
+    font-size: 12px;
+    stroke: none;
+    fill: #1a316b;
+}
+
+.panelHeader-small-female {
+    font-size: 12px;
+    stroke: none;
+    fill: #7f1b55;
+}
+
 .tickLabel {
     fill: gray;
     font-size: 14px;

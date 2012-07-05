@@ -26,6 +26,15 @@ function renderChart(data, compareData, place, comparePlace) {
         return d3.max([d.male.percentOfTotal, d.female.percentOfTotal]);
     });
     if (compareData !== undefined) {
+        var comapareTotalMales = d3.nest()
+            .key(function(d) { return 'all'; })
+            .rollup(function(d) { return d3.sum(d, function(d) { return parseInt(d.male.people); }); })
+            .entries(compareData)[0].values;
+        var compareTotalFemales = d3.nest()
+            .key(function(d) { return 'all'; })
+            .rollup(function(d) { return d3.sum(d, function(d) { return parseInt(d.female.people); }); })
+            .entries(compareData)[0].values;
+
         var maxComparePopulationPercentage = d3.max(compareData, function(d) {
             return d3.max([d.male.percentOfTotal, d.female.percentOfTotal]);
         });
@@ -60,17 +69,29 @@ function renderChart(data, compareData, place, comparePlace) {
         .text(function(d) { return d.age; });
 
     // panels
-    renderPanel('male', 0, "Males", totalMales);
-    renderPanel('female', centerLabelWidth + sideWidth, "Females", totalFemales);
+    renderPanel('male', 0, "Males", totalMales, comapareTotalMales);
+    renderPanel('female', centerLabelWidth + sideWidth, "Females", totalFemales, compareTotalFemales);
 
-    function renderPanel(type, xTranslate, gender, numberOfPeople) {
+    function format(number) {
+        return $.formatNumber(number, {format:"#,###", locale:"us"});
+    }
+
+    function renderPanel(type, xTranslate, gender, numberOfPeople, comparePeople) {
         var panel = chart.append('g').attr('transform', 'translate(' + xTranslate + ',0)');
 
-        panel.append('text').text($.formatNumber(numberOfPeople, {format:"#,###", locale:"us"}) + ' ' + gender + ' in ' + place)
+        panel.append('text').text(format(numberOfPeople) + ' ' + gender + ' in ' + place)
             .attr("x", sideWidth / 2)
-            .attr("y", 15)
+            .attr("y", -15)
             .attr("text-anchor", "middle")
             .attr('class', 'panelHeader-' + type);
+
+        if (compareData !== undefined) {
+            panel.append('text').text(format(comparePeople) + ' ' + gender + ' in ' + comparePlace)
+                .attr("x", sideWidth / 2)
+                .attr("y", 15)
+                .attr("text-anchor", "middle")
+                .attr('class', 'panelHeader-small-' + type);
+        }
 
         panel.selectAll("rect").data(data).enter().append("rect")
             .attr('class', type)
@@ -142,13 +163,13 @@ function renderChart(data, compareData, place, comparePlace) {
         .attr('pointer-events','visible')
         .attr('title', function(d) { return 'Age ' + d.age + ' in ' + place; })
         .attr('data-content', function(d, i) {
-            return '<div style="white-space:nowrap;"><b>' + d.total.people + ' people, ' + d3.round(d.total.percentOfTotal, 2) + '% of population' + '</b>'
-                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
-                + '<div style="white-space:nowrap;">' + d.male.people + ' males,' + d3.round(d.male.percentOfTotal, 2) + '% of population'
-                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].male.percentOfTotal, 2) + '%)' : '')
+            return '<div style="white-space:nowrap;"><b>' + format(d.total.people) + ' people, ' + d3.round(d.total.percentOfTotal, 2) + '% of population' + '</b>'
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' +  format(d.total.people) + ' people, ' + d3.round(compareData[i].total.percentOfTotal, 2) + '%)' : '') +  '</div>'
+                + '<div style="white-space:nowrap;">' + format(d.male.people) + ' males,' + d3.round(d.male.percentOfTotal, 2) + '% of population'
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' +  format(d.male.people) + ' males, ' + d3.round(compareData[i].male.percentOfTotal, 2) + '%)' : '')
                 +  '</div>'
-                + '<div style="white-space:nowrap;">' + d.female.people + ' females,' + d3.round(d.female.percentOfTotal, 2) + '% of population'
-                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' + d3.round(compareData[i].female.percentOfTotal, 2) + '%)' : '') +  '</div>'
+                + '<div style="white-space:nowrap;">' + format(d.female.people) + ' females,' + d3.round(d.female.percentOfTotal, 2) + '% of population'
+                + ((compareData !== undefined) ? ' (vs. ' + comparePlace + ' ' +  format(d.female.people) + ' females, ' + d3.round(compareData[i].female.percentOfTotal, 2) + '%)' : '') +  '</div>'
         })
         .on('mouseover', function(d,i) {
             d3.select(this).attr('fill', 'rgba(0,0,0,.15)');
