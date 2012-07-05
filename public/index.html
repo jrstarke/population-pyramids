@@ -24,7 +24,10 @@
     <div class="row-fluid">
         <div class="span12">
             <h1 class="header" style="padding-bottom: 20px">Population Pyramid</h1>
-            <h3 class="header">
+            <h3 class="header" style="position: relative;">
+                <span id="help" style="position: absolute; left: 0px; top: 4px;">
+                    <button type="button" class="btn btn-small btn-primary" href="#" onclick="$('#info').toggle()"><i class="icon-info-sign icon-white"></i>&nbsp;<b>Info</b></button>
+                </span>
                 <span style="position: relative;">
                     <input type="text" class="search-query" id="select_main" tabindex="1" />
                     <span style="position: absolute; left: 270px; top: 0px; color: #bbb; font-weight: normal; font-size: 12px;">solid bars</span>
@@ -34,20 +37,20 @@
                     <input type="text" class="search-query" id="select_compare" tabindex="2"/>
                     <span style="position: absolute; left: 305px; top: 0px; color: #bbb; font-weight: normal; font-size: 12px;">line</span>
                 </span>
-            </h3>
-            <span id="share" style="float: right; position: relative; top: -32px;">
-                <span class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                    <a class="addthis_button_facebook"></a>
-                    <a class="addthis_button_twitter"></a>
-                    <a class="addthis_button_compact"></a>
+                <span id="share" style="position: absolute; top: 11px; right: 0px;">
+                    <span class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                        <a class="addthis_button_facebook"></a>
+                        <a class="addthis_button_twitter"></a>
+                        <a class="addthis_button_compact"></a>
+                    </span>
+                    <script type="text/javascript">var addthis_config = {
+                        "data_track_addressbar":true, data_ga_social : true, data_ga_property: 'UA-69155-30'
+                    };</script>
+                    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
                 </span>
-                <script type="text/javascript">var addthis_config = {
-                    "data_track_addressbar":true, data_ga_social : true, data_ga_property: 'UA-69155-30'
-                };</script>
-                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
-            </span>
-            <div class="alert alert-block alert-info" style="display:none;">
-                <button type="button" class="close" data-dismiss="alert">×</button>
+            </h3>
+            <div id="info" class="alert alert-block alert-info" style="display:none;">
+                <button type="button" class="close" onclick="$('#info').toggle()">×</button>
                 <h4 class="alert-heading">Population pyramids</h4>
                 <p>
                     shows the distribution of the population
