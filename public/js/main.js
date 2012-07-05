@@ -142,9 +142,19 @@ d3.json('/regions.json', function(regions) {
         hasher.setHash(encodeURIComponent(mainName) + '/' + encodeURIComponent(compareName));
     };
 
-    crossroads.addRoute('/{mainName}/{compareName}', function(mainName, compareName){
+    var currentMainName = undefined;
+    var currentCompareName = undefined;
+
+    crossroads.addRoute('{mainName}/{compareName}', function(mainName, compareName){
         mainName = decodeURIComponent(mainName);
         compareName = decodeURIComponent(compareName);
+
+        // prevent double loading
+        if (mainName === currentMainName && compareName === currentCompareName) {
+            return;
+        }
+        currentMainName = mainName;
+        currentCompareName = compareName;
 
         updateTitle(mainName, compareName);
         updateControls(mainName, compareName);
