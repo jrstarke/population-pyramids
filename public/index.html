@@ -95,7 +95,12 @@
         </p>
     </footer>
 </div>
-<script src="/js/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+    if (typeof $ == 'undefined') {
+        document.write(decodeURIComponent("%3Cscript src='/js/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+</script>
 <script src="/js/jshashtable.min.js"></script>
 <script src="/js/jquery-numberformatter.min.js"></script>
 <script src="/js/underscore.min.js"></script>
@@ -104,7 +109,12 @@
 <script src="/js/bootstrap-tooltip.min.js"></script>
 <script src="/js/bootstrap-popover.min.js"></script>
 <script src="/js/custom-popover.min.js"></script>
-<script src="/js/d3.v2.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/2.8.1/d3.v2.min.js"></script>
+<script type="text/javascript">
+    if (typeof d3 == 'undefined') {
+        document.write(decodeURIComponent("%3Cscript src='/js/d3.v2.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+</script>
 <script src="/js/signals.min.js"></script>
 <script src="/js/hasher.min.js"></script>
 <script src="/js/crossroads.min.js"></script>
