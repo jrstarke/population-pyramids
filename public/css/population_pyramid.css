@@ -79,13 +79,6 @@ line.tick {
     text-align: center;
 }
 
-.header input {
-    margin-top: 6px;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 27px;
-}
-
 #footer {
     color: #777;
 }
@@ -94,6 +87,11 @@ line.tick {
     color: black;
 }
 
-.search-query {
+input.search-query {
+    margin-top: 7px;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 27px;
     width: 320px;
+    height: 24px;
 }
