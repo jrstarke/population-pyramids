@@ -264,20 +264,28 @@ module DataLoader
         value = code[:value]
         
         codeDesc = nil
+        
+        geo_type = ''
+        title = code.css('AnnotationTitle').first
+        if title
+          geo_type = ' (' + title.content.strip + ')'
+        end
+        
         code.xpath('Description').each do |desc|
           lang = desc[:lang]
           
           if lang 
             if lang == language
-              codeDesc = desc.content.strip
+              codeDesc = desc.content.strip + geo_type
             end  
           else
-            codeDesc = desc.content.strip
+            codeDesc = desc.content.strip + geo_type
           end
         end
         codeListDict[value] = codeDesc     
       end        
       dict[id] = codeListDict
+      break
     end
     return dict 
   end   
@@ -324,7 +332,9 @@ if __FILE__ == $0
   #listings = DataLoader.loadData()
   #puts listings.length
 
-  precomputeRegionsFile()
-  precomputeRegions()
+  DataLoader.attribs()
+
+  #precomputeRegionsFile()
+  #precomputeRegions()
   #puts DataLoader.findAttributeValueForKey("sex","1")
 end
