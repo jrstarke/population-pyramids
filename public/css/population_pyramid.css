@@ -85,3 +85,11 @@ line.tick {
     font-weight: bold;
     line-height: 27px;
 }
+
+#footer {
+    color: #777;
+}
+
+#footer a {
+    color: black;
+}
