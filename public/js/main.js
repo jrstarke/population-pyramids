@@ -95,14 +95,24 @@ d3.json('/regions.json', function(regions) {
     setupTypeahead('#select_compare');
 
     var updateShareConfig = function(mainName, compareName) {
-        window.addthis_share = {
+        var addthis_config = {
+            'data_track_addressbar': true,
+            'data_ga_social' : true,
+            'data_ga_property': 'UA-69155-30'
+            };
+
+        var addthis_share = {
             email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
             email_template: "pop_pyramid",
             description: 'Age profile of ' + mainName + ' compared to ' + compareName,
             templates : {
                 twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)'
             }
-        }
+        };
+
+        $('#addthis').html('<a class="addthis_button_facebook"></a><a class="addthis_button_twitter"></a><a class="addthis_button_compact"></a>');
+
+        window.addthis.toolbox("#addthis", addthis_config, addthis_share);
     };
 
     var updateTitle = function(mainName, compareName) {
