@@ -101,10 +101,10 @@ d3.json('/regions.json', function(regions) {
             email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
             email_template: "pop_pyramid",
             description: 'Age profile of ' + mainName + ' compared to ' + compareName,
-            templates: {
-                twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)',
+            templates : {
+                twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)'
             }
-        };
+        }
 
         _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
         _gat._getTrackerByName()._trackEvent('Region View', mainName, "Main Region");
@@ -128,9 +128,9 @@ d3.json('/regions.json', function(regions) {
     }
     else
     {
-        $("#select_main").val('Capital, BC');
+        $("#select_main").val('Capital, BC (CD)');
         $("#select_compare").val('Canada');
 
-        updatePyramid('Capital, BC', 'Canada');
+        updatePyramid('Capital, BC (CD)', 'Canada');
     }
 });
