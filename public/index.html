@@ -63,7 +63,11 @@
 			<a class="addthis_button_print"></a>
 			<a class="addthis_button_compact"></a>
 			</div>
-			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true, "data_ga_social" : true, "data_ga_property": 'UA-69155-30'};</script>
+			<script type="text/javascript">var addthis_config = {
+				"data_track_addressbar":true,
+				data_ga_social : true,
+				 data_ga_property: 'UA-69155-30',
+				 };</script>
 			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
 			<!-- AddThis Button END -->
             <div id="chart"></div>
@@ -184,6 +188,15 @@
             }
             window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
             window.document.title = "Population Pyramids - " + mainName + " compared to " + compareName;
+            
+            addthis_share = {
+            	email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
+            	email_template: "pop_pyramid",
+            	description: 'Age profile of ' + mainName + ' compared to ' + compareName,
+            	templates: {
+                   twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)',
+               }
+            };
             
             _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
         }
