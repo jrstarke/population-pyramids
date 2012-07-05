@@ -1,12 +1,12 @@
 d3.json('/regions.json', function(regions) {
     var regionIdLookupTable = {}
-    _.each(regions, function(d) {
+    regions.forEach(function(d) {
         regionIdLookupTable[d.name.toLowerCase()] = d.id;
     });
 
     var setupTypeahead = function(id) {
         $(id).typeahead({
-            'source': _.map(regions, function(region) { return region.name; })
+            'source': regions.map(function(region) { return region.name; })
         });
         $(id).change(function(e){
             updateUrl();
