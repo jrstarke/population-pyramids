@@ -1,7 +1,7 @@
-var currentMainId = undefined;
-var currentCompareId = undefined;
-
 d3.json('/regions.json', function(regions) {
+    var currentMainId = undefined;
+    var currentCompareId = undefined;
+
     var regionIdLookupTable = {}
     _.each(regions, function(d) {
         regionIdLookupTable[d.name.toLowerCase()] = d.id;
@@ -12,15 +12,15 @@ d3.json('/regions.json', function(regions) {
             'source': _.map(regions, function(region) { return region.name; })
         });
         $(id).change(function(e){
-            updatePyramid();
+            updateUrl();
         });
         $(id).submit(function(e) {
             e.preventDefault();
-            updatePyramid();
+            updateUrl();
         });
         $(id).keydown(function(e) {
             if (e.keyCode == 13 && !$(id).data('typeahead').shown) {
-                updatePyramid();
+                updateUrl();
             }
         });
     };
@@ -38,13 +38,6 @@ d3.json('/regions.json', function(regions) {
     var updatePyramid = function(mainName, compareName) {
         if (updateInProgress) {
             return; // XXX UI elements should be deactivated
-        }
-
-        if (mainName === undefined) {
-            mainName = $('#select_main').val();
-        }
-        if (compareName === undefined) {
-            compareName = $('#select_compare').val();
         }
 
         var mainId = regionIdLookupTable[mainName.toLowerCase()];
@@ -94,13 +87,13 @@ d3.json('/regions.json', function(regions) {
                 });
             });
         }
+    };
 
-        updateUrl(mainName, compareName);
+    setupTypeahead('#select_main');
+    setupTypeahead('#select_compare');
 
-        // window.location.hash = mainName.replace(/\s/g,'+') + '&' + compareName.replace(/\s/g,'+')
-        window.document.title = "Population Pyramids - " + mainName + " compared to " + compareName;
-
-        addthis_share = {
+    var updateShareConfig = function(mainName, compareName) {
+        window.addthis_share = {
             email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
             email_template: "pop_pyramid",
             description: 'Age profile of ' + mainName + ' compared to ' + compareName,
@@ -108,28 +101,44 @@ d3.json('/regions.json', function(regions) {
                 twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)'
             }
         }
+    };
 
+    var updateTitle = function(mainName, compareName) {
+        window.document.title = + mainName + " compared to " + compareName + " - Population Pyramids" ;
+    };
+
+    var updateControls = function(mainName, compareName) {
+        $("#select_main").val(mainName);
+        $("#select_compare").val(compareName);
+    };
+
+    var trackSelection = function(mainName, compareName) {
         _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
         _gat._getTrackerByName()._trackEvent('Region View', mainName, "Main Region");
         _gat._getTrackerByName()._trackEvent('Region View', compareName, "Comparison Region");
-    }
-
-    setupTypeahead('#select_main');
-    setupTypeahead('#select_compare');
+    };
 
     // routing
     var updateUrl = function(mainName, compareName) {
+        if (mainName === undefined) {
+            mainName = $('#select_main').val();
+        }
+        if (compareName === undefined) {
+            compareName = $('#select_compare').val();
+        }
+
         hasher.setHash(encodeURIComponent(mainName) + '/' + encodeURIComponent(compareName));
-    }
+    };
 
-    crossroads.addRoute('/{place}/{comparisonPlace}', function(place, comparisonPlace){
-        place = decodeURIComponent(place);
-        comparisonPlace = decodeURIComponent(comparisonPlace);
+    crossroads.addRoute('/{mainName}/{compareName}', function(mainName, compareName){
+        mainName = decodeURIComponent(mainName);
+        compareName = decodeURIComponent(compareName);
 
-        $("#select_main").val(place);
-        $("#select_compare").val(comparisonPlace);
-
-        updatePyramid(place, comparisonPlace);
+        updateTitle(mainName, compareName);
+        updateControls(mainName, compareName);
+        updateShareConfig(mainName, compareName);
+        updatePyramid(mainName, compareName);
+        trackSelection(mainName, compareName);
     });
     crossroads.bypassed.add(function() {
         // if we cannot match the route, reset to default
@@ -144,4 +153,3 @@ d3.json('/regions.json', function(regions) {
     hasher.init();
 
 });
-
