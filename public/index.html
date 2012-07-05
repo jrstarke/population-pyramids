@@ -23,7 +23,30 @@
 <div class="container">
     <div class="row-fluid">
         <div class="span12">
-            <div class="alert alert-block alert-info">
+            <h1 class="header" style="padding-bottom: 20px">Population Pyramid</h1>
+            <h3 class="header">
+                <span style="position: relative;">
+                    <input type="text" class="search-query" id="select_main" tabindex="1" />
+                    <span style="position: absolute; left: 270px; top: 0px; color: #bbb; font-weight: normal; font-size: 12px;">solid bars</span>
+                </span>
+                <span class="brand">compared to</span>
+                <span style="position: relative;">
+                    <input type="text" class="search-query" id="select_compare" tabindex="2"/>
+                    <span style="position: absolute; left: 305px; top: 0px; color: #bbb; font-weight: normal; font-size: 12px;">line</span>
+                </span>
+            </h3>
+            <span id="share" style="float: right; position: relative; top: -32px;">
+                <span class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                    <a class="addthis_button_facebook"></a>
+                    <a class="addthis_button_twitter"></a>
+                    <a class="addthis_button_compact"></a>
+                </span>
+                <script type="text/javascript">var addthis_config = {
+                    "data_track_addressbar":true, data_ga_social : true, data_ga_property: 'UA-69155-30'
+                };</script>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
+            </span>
+            <div class="alert alert-block alert-info" style="display:none;">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <h4 class="alert-heading">Population pyramids</h4>
                 <p>
@@ -36,24 +59,6 @@
                     You can move the mouse over the age group in the pyramid to get detailed information.
                 </p>
             </div>
-            <h3 id="header">
-                Population pyramid of
-                <input type="text" class="search-query" id="select_main" tabindex="1"/>
-                <span class="brand">compared to</span>
-                <input type="text" class="search-query" id="select_compare" tabindex="2"/>
-                <span class="brand">(line)</span>
-                <span id="share" style="float: right; position: relative; top: 12px;">
-                    <span class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                        <a class="addthis_button_facebook"></a>
-                        <a class="addthis_button_twitter"></a>
-                        <a class="addthis_button_compact"></a>
-                    </span>
-                    <script type="text/javascript">var addthis_config = {
-                        "data_track_addressbar":true, data_ga_social : true, data_ga_property: 'UA-69155-30'
-                    };</script>
-                    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
-                </span>
-            </h3>
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
                 <h4 class="alert-heading">Loading...</h4>
                 <p>The population pyramid should show in a second.</p>

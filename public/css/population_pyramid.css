@@ -75,11 +75,11 @@ line.tick {
     stroke: none;
 }
 
-#header {
+.header {
     text-align: center;
 }
 
-#header input {
+.header input {
     margin-top: 6px;
     font-size: 18px;
     font-weight: bold;
@@ -92,4 +92,8 @@ line.tick {
 
 #footer a {
     color: black;
+}
+
+.search-query {
+    width: 320px;
 }
