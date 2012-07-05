@@ -109,9 +109,9 @@ d3.json('/regions.json', function(regions) {
     };
 
     var trackSelection = function(mainName, compareName) {
-        _gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
-        _gat._getTrackerByName()._trackEvent('Region View', mainName, "Main Region");
-        _gat._getTrackerByName()._trackEvent('Region View', compareName, "Comparison Region");
+        window._gaq.push(['_trackPageview',window.location.pathname+window.location.hash]);
+        window._gat._getTrackerByName()._trackEvent('Region View', mainName, "Main Region");
+        window._gat._getTrackerByName()._trackEvent('Region View', compareName, "Comparison Region");
     };
 
     // routing
