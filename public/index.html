@@ -36,23 +36,23 @@
                     You can move the mouse over the age group in the pyramid to get detailed information.
                 </p>
             </div>
-            <div id="share" style="position: fixed; top: 200px;">
-                <div class="addthis_toolbox addthis_floating_style addthis_16x16_style" style="border: 1px solid lightgray;">
-                    <a class="addthis_button_facebook"></a>
-                    <a class="addthis_button_twitter"></a>
-                    <a class="addthis_button_compact"></a>
-                </div>
-                <script type="text/javascript">var addthis_config = {
-                    "data_track_addressbar":true, data_ga_social : true,data_ga_property: 'UA-69155-30'
-                };</script>
-                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
-            </div>
             <h3 id="header">
                 Population pyramid of
                 <input type="text" class="search-query" id="select_main" tabindex="1"/>
-                <span class="brand">&nbsp;&nbsp;&nbsp;compared to</span>
+                <span class="brand">compared to</span>
                 <input type="text" class="search-query" id="select_compare" tabindex="2"/>
-                <span class="brand">&nbsp;&nbsp;&nbsp;(line)</span>
+                <span class="brand">(line)</span>
+                <span id="share" style="float: right; position: relative; top: 12px;">
+                    <span class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                        <a class="addthis_button_facebook"></a>
+                        <a class="addthis_button_twitter"></a>
+                        <a class="addthis_button_compact"></a>
+                    </span>
+                    <script type="text/javascript">var addthis_config = {
+                        "data_track_addressbar":true, data_ga_social : true,data_ga_property: 'UA-69155-30'
+                    };</script>
+                    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=jrstarke"></script>
+                </span>
             </h3>
             <div id="loadingBox" class="alert alert-block alert-info fade in" style="display:none;">
                 <h4 class="alert-heading">Loading...</h4>
