@@ -70,7 +70,7 @@ function renderChart(data, compareData, place, comparePlace) {
             .attr("x", sideWidth / 2)
             .attr("y", 15)
             .attr("text-anchor", "middle")
-            .attr('class', 'panelHeader');
+            .attr('class', 'panelHeader-' + type);
 
         panel.selectAll("rect").data(data).enter().append("rect")
             .attr('class', type)
