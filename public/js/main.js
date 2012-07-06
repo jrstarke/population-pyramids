@@ -82,12 +82,25 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
             } else {
                 $('#loadingBox').show();
 
-                // TODO parallel loading
-                loadAgeProfile(mainId, function(data) {
-                    loadAgeProfile(compareId, function(compareData) {
-                        renderChart(data, compareData, mainName, compareName);
+                // parallel loading
+                var loadedMainData = undefined;
+                var loadedCompareData = undefined;
+
+                var renderIfLoaded = function() {
+                    if (loadedMainData !== undefined && loadedCompareData !== undefined) {
+                        renderChart(loadedMainData, loadedCompareData, mainName, compareName);
                         $('#loadingBox').hide();
-                    });
+                    }
+                };
+
+                loadAgeProfile(mainId, function(data) {
+                    loadedMainData = data;
+                    renderIfLoaded();
+                });
+
+                loadAgeProfile(compareId, function(data) {
+                    loadedCompareData = data;
+                    renderIfLoaded();
                 });
             }
         };
