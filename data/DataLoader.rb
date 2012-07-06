@@ -284,6 +284,12 @@ module DataLoader
           else
             codeDesc = desc.content.strip
           end
+          
+          if value.length == 2 and id == 'geo' 
+            puts codeDesc
+            pieces = codeDesc.split('/')
+            codeDesc = pieces[0].strip
+          end
         end
         codeListDict[value] = codeDesc     
       end        
@@ -297,7 +303,7 @@ end
 def precomputeRegionsFile()
   provs = {"48" => "AB", "59" => "BC", "46" => "MB", "13" => "NB", "10" => "NL", "61" => "NT", "12" => "NS", "62" => "NU", "35" => "ON", "11" => "PE", "24" => "QC", "47" => "SK", "60" => "YT"}
   region_totals = DataLoader.region_totals()
-  attribs = DataLoader.buildDictionary()
+  attribs = DataLoader.attribs()
   
   output = []
   regions = attribs['geo']
