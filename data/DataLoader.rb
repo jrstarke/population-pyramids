@@ -301,7 +301,11 @@ def precomputeRegionsFile()
   
   output = []
   regions = attribs['geo']
-  regions.each_key do |key| 
+  
+  # sort region totals by population
+  region_set = region_totals.to_a
+  region_set = region_set.sort {|x,y| y[1] <=> x[1]}
+  region_set.each do |key,pop| 
     name = regions[key]
     if key.length > 2
       
@@ -312,11 +316,10 @@ def precomputeRegionsFile()
       end
       name = name + ", " + prov + (attribs['geo_title'][key] ? ' (' + attribs['geo_title'][key] + ')' : '')
     end 
-    population = region_totals[key]
-    output = output + [{:name => name, :id => key, :population => population}]
+    output = output + [{:n => name, :i => key}]
   end
   
-  output = output.sort { |x,y| y[:population] <=> x[:population] }
+  #output = output.sort { |x,y| y[:population] <=> x[:population] }
   
   File.open('public/regions.json', 'w') {|f| f.write(JSON.dump(output)) }
 end

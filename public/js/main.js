@@ -2,12 +2,12 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
     d3.json('/regions.json', function(regions) {
         var regionIdLookupTable = {}
         regions.forEach(function(d) {
-            regionIdLookupTable[d.name.toLowerCase()] = d.id;
+            regionIdLookupTable[d.n.toLowerCase()] = d.i;
         });
 
         var setupTypeahead = function(id) {
             $(id).typeahead({
-                'source': regions.map(function(region) { return region.name; })
+                'source': regions.map(function(region) { return region.n; })
             });
             $(id).change(function(e){
                 updateUrl();
