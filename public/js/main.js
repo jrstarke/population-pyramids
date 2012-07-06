@@ -119,14 +119,26 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
                 'data_ga_property': 'UA-69155-30'
                 };
 
-            var addthis_share = {
-                email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
-                email_template: "pop_pyramid",
-                description: 'Age profile of ' + mainName + ' compared to ' + compareName,
-                templates : {
-                    twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (by @jamiestarke and @lgrammel)'
-                }
-            };
+            var addthis_share = undefined;
+            if (compareName !== undefined) {
+                addthis_share = {
+                    email_vars: { CustomText: 'Age profile of ' + mainName + ' compared to ' + compareName },
+                    email_template: "pop_pyramid",
+                    description: 'Age profile of ' + mainName + ' compared to ' + compareName,
+                    templates : {
+                        twitter: 'Age profile of ' + mainName + ' compared to ' + compareName+ ' {{url}} (vis by @jamiestarke @lgrammel)'
+                    }
+                };
+            } else {
+                addthis_share = {
+                    email_vars: { CustomText: 'Age profile of ' + mainName },
+                    email_template: "pop_pyramid",
+                    description: 'Age profile of ' + mainName,
+                    templates : {
+                        twitter: 'Age profile of ' + mainName + ' {{url}} (vis by @jamiestarke @lgrammel)'
+                    }
+                };
+            }
 
             $('#addthis').html('<a class="addthis_button_facebook"></a><a class="addthis_button_twitter"></a><a class="addthis_button_compact"></a>');
 
