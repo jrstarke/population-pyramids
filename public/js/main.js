@@ -146,7 +146,11 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
         };
 
         var updateTitle = function(mainName, compareName) {
-            window.document.title = mainName + " compared to " + compareName + " - Population Pyramids" ;
+            if (compareName !== undefined) {
+                window.document.title = mainName + " compared to " + compareName + " - Population Pyramids" ;
+            } else {
+                window.document.title = mainName + " Population Pyramid" ;
+            }
         };
 
         var updateControls = function(mainName, compareName) {
