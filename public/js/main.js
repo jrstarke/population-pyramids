@@ -28,8 +28,12 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
             $('#mainErrorBox').show();
         };
         var showCompareError = function(compareName) {
-            $('#compareErrorMessage').text("Place '" + compareName + "' not found for comparison.");
-            $('#compareErrorBox').show();
+            if (compareName === undefined) {
+                $('#compareErrorBox').hide();
+            } else {
+                $('#compareErrorMessage').text("Place '" + compareName + "' not found for comparison.");
+                $('#compareErrorBox').show();
+            }
         };
 
         var cache = {};
@@ -46,7 +50,7 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
 
         var updatePyramid = function(mainName, compareName) {
             var mainId = regionIdLookupTable[mainName.toLowerCase()];
-            var compareId = regionIdLookupTable[compareName.toLowerCase()];
+            var compareId = compareName !== undefined ? regionIdLookupTable[compareName.toLowerCase()] : undefined;
 
             // update error boxes
             if (mainId === undefined && compareId == undefined) {
@@ -153,15 +157,20 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
                 compareName = $('#select_compare').val();
             }
 
+            // main name must be set
+            if (mainName === '') {
+                return;
+            }
+
             hasher.setHash(encodeURIComponent(mainName) + '/' + encodeURIComponent(compareName));
         };
 
         var currentMainName = undefined;
         var currentCompareName = undefined;
 
-        crossroads.addRoute('{mainName}/{compareName}', function(mainName, compareName){
+        var onUrlChange = function(mainName, compareName){
             mainName = decodeURIComponent(mainName);
-            compareName = decodeURIComponent(compareName);
+            compareName = compareName !== undefined ? decodeURIComponent(compareName) : undefined;
 
             // prevent double loading
             if (mainName === currentMainName && compareName === currentCompareName) {
@@ -175,7 +184,10 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
             updateShareConfig(mainName, compareName);
             updatePyramid(mainName, compareName);
             trackSelection(mainName, compareName);
-        });
+        };
+
+        crossroads.addRoute('/{mainName}/{compareName}', onUrlChange);
+        crossroads.addRoute('/{mainName}', onUrlChange);
         crossroads.bypassed.add(function() {
             // if we cannot match the route, reset to default
             updateUrl('Capital, BC (CD)', 'Canada');
