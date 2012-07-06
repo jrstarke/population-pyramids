@@ -147,9 +147,9 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
 
         var updateTitle = function(mainName, compareName) {
             if (compareName !== undefined) {
-                window.document.title = mainName + " compared to " + compareName + " - Population Pyramids" ;
+                window.document.title = mainName + " compared to " + compareName + " - Canadian Population Pyramids" ;
             } else {
-                window.document.title = mainName + " Population Pyramid" ;
+                window.document.title = mainName + " Canadian Population Pyramid" ;
             }
         };
 
