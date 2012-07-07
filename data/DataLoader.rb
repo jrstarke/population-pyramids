@@ -251,8 +251,14 @@ module DataLoader
   end
   
   def self.buildDictionary(language = "en")
-    dict = {}
-    dict.default = {}
+    hash_maker = proc do |h, k|
+      h[k] = Hash.new(&hash_maker)
+    end
+    
+    dict = Hash.new(&hash_maker)
+    
+    #dict = {}
+    #dict.default = {}
     doc = Nokogiri::XML(File.open("data/Structure_98-311-XCB2011023.xml"))
     doc.remove_namespaces!
     
@@ -273,6 +279,17 @@ module DataLoader
           titles[value] = title.content.strip
           dict[id+'_title'] = titles
         end
+        
+        code.css('Annotation').each do |annotation|
+          anno_type = annotation.at_css('AnnotationType').content
+          if anno_type == 'CSDType'
+            anno_text = annotation.at_css('AnnotationText').content
+            puts anno_type + '-' + anno_text
+            types = dict[id+'_type']
+            types[value] = anno_text.strip
+            dict[id+'_type'] = types
+          end
+        end 
         
         code.xpath('Description').each do |desc|
           lang = desc[:lang]
@@ -322,7 +339,10 @@ def precomputeRegionsFile()
       end
       name = name + ", " + prov + (attribs['geo_title'][key] ? ' (' + attribs['geo_title'][key] + ')' : '')
     end 
-    output = output + [{:n => name, :i => key}]
+    title = attribs['geo_title'][key]
+    type = attribs['geo_type'][key]
+    
+    output = output + [{:n => name, :i => key, :g => title, :t => type}]
   end
   
   #output = output.sort { |x,y| y[:population] <=> x[:population] }
