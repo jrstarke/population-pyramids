@@ -48,7 +48,7 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
                        }
                        // for CDS, also add the type
                        else if (d.g === 'CSD') {
-                           var name = d.n.substring(0, d.n.length - ')'.length) + ', ' + d.t + ')';
+                           var name = d.n.substring(0, d.n.length - ')'.length) + '-' + d.t + ')';
                            regionIdLookupTable[name.toLowerCase()] = d.i;
                            typeaheadContent.push(name);
                        }
