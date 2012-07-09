@@ -1,13 +1,71 @@
 if (Modernizr.svg && Modernizr.inlinesvg) {
     d3.json('/regions.json', function(regions) {
-        var regionIdLookupTable = {}
+
+        // build main area lookup table
+        var tempRegionIdToList = {};
         regions.forEach(function(d) {
-            regionIdLookupTable[d.n.toLowerCase()] = d.i;
+            var name = d.n.toLowerCase();
+
+            if (d.g === 'CSD') {
+                name = name.substring(0, name.length - ' (CSD)'.length);
+            }
+            if (d.g === 'CD') {
+                name = name.substring(0, name.length - ' (CD)'.length);
+            }
+
+            if (!tempRegionIdToList.hasOwnProperty(name)) {
+                 tempRegionIdToList[name] = [];
+            }
+
+            tempRegionIdToList[name].push(d);
+        });
+
+        var typeaheadContent = [];
+        var regionIdLookupTable = {};
+        for (var name in tempRegionIdToList) {
+            if(tempRegionIdToList.hasOwnProperty(name)) {
+                var tempRegions = tempRegionIdToList[name];
+                if (tempRegions.length === 1) {
+                    var name = tempRegions[0].n;
+
+                    if (tempRegions[0].g === 'CSD') {
+                        name = name.substring(0, name.length - ' (CSD)'.length);
+                    }
+                    if (tempRegions[0].g === 'CD') {
+                        name = name.substring(0, name.length - ' (CD)'.length);
+                    }
+
+                    regionIdLookupTable[name.toLowerCase()] = tempRegions[0].i;
+                    typeaheadContent.push(name);
+                } else {
+                    console.log(tempRegions);
+                    // more than 1 region, need to generate more names
+                    tempRegions.forEach(function(d) {
+                       // for CD's, just have them in parentheses 
+                       if (d.g === 'CD') {
+                           regionIdLookupTable[d.n.toLowerCase()] = d.i;
+                           typeaheadContent.push(d.n);
+                       }
+                       // for CDS, also add the type
+                       else if (d.g === 'CSD') {
+                           var name = d.n.substring(0, d.n.length - ')'.length) + ', ' + d.t + ')';
+                           regionIdLookupTable[name.toLowerCase()] = d.i;
+                           typeaheadContent.push(name);
+                       }
+                    });
+                }
+            }
+        }
+
+        // build fallback table
+        var legacyRegionIdLookupTable = {};
+        regions.forEach(function(d) {
+            legacyRegionIdLookupTable[d.n.toLowerCase()] = d.i;
         });
 
         var setupTypeahead = function(id) {
             $(id).typeahead({
-                'source': regions.map(function(region) { return region.n; })
+                'source': typeaheadContent
             });
             $(id).change(function(e){
                 updateUrl();
@@ -50,7 +108,13 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
 
         var updatePyramid = function(mainName, compareName) {
             var mainId = regionIdLookupTable[mainName.toLowerCase()];
+            if (mainId === undefined) {
+                mainId = legacyRegionIdLookupTable[mainName.toLowerCase()];
+            }
             var compareId = compareName !== undefined ? regionIdLookupTable[compareName.toLowerCase()] : undefined;
+            if (compareId === undefined) {
+                compareId = compareName !== undefined ? legacyRegionIdLookupTable[compareName.toLowerCase()] : undefined;
+            }
 
             // update error boxes
             if (mainId === undefined && compareId == undefined) {
@@ -206,12 +270,12 @@ if (Modernizr.svg && Modernizr.inlinesvg) {
         crossroads.addRoute('/{mainName}', onUrlChange);
         crossroads.bypassed.add(function() {
             // if we cannot match the route, reset to default
-            updateUrl('Capital, BC (CD)', 'Canada');
+            updateUrl('Capital, BC', 'Canada');
         });
 
         var parseHash = function(newHash, oldHash) {
             crossroads.parse(newHash);
-        }
+        };
         hasher.initialized.add(parseHash);
         hasher.changed.add(parseHash);
         hasher.init();
